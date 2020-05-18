@@ -1,0 +1,32 @@
+
+clc
+
+idx = 64:91;
+mytime = (1:length(idx))';
+load('HaresLynxData.mat')
+mydata(:,1) = Lotka_Volterra_Data(idx,2);
+mydata(:,2) = Lotka_Volterra_Data(idx,3);
+hold on
+plot(mydata(:,1),'b');
+plot(mydata(:,2),'b');
+
+k=[0.7 0.1 0.7 0.1];
+%% Let's plot the initial guess
+y0(1) = 21.5; y0(2) = 3.4;
+[t,y] = ode45(@Lotka_Volterra_Model,mytime,y0,[],k);
+hold on
+plot(y,'r')
+
+objfun = @(x) least_squares(x,mydata, mytime);
+%[k lest_squares] = fminsearch(objfun, k)
+
+%% with upper/lower bounds
+[k lest_squares] = fminsearchbnd3(objfun, k,  [0.2 0.01 0.2 0.01], [1 1 1 1]);
+
+%% Plot model with estimated parameters
+y0(1) = 21.5; y0(2) = 3.4;
+[t,y] = ode45(@Lotka_Volterra_Model,mytime,y0,[],k);
+hold on
+plot(y,'g')
+
+

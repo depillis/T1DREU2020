@@ -1,0 +1,5 @@
+function dy = simple_model(t,y,a,b)
+dy = zeros(2,1);
+dy(1) = -a*y(2) + y(1) + t^2 + 6*t + b;
+dy(2) = b*y(1) - a*y(2) - (a+b)*(1-t^2);
+end

@@ -1,0 +1,5 @@
+This folder contains codes from Chow, Ferrer & Nesselroade (in press). The two examples included in the zipped folder are:
+(1) Fitting the Lorenz model with a single indicator for each state variable to single-subject data using the unscented Kalman filter (UKF). States and parameters are represented jointly as part of the state vector. The main control file for this example is LorenzControlfin.m.
+
+
+(1) Fitting the Lorenz model described above to multiple-subject data using the unscented Kalman filter (UKF). The main control file for this example is LorenzlikMultiP2.m.
