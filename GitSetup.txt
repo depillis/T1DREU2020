@@ -8,6 +8,10 @@ git commit -m "first commit"
 git remote add origin https://github.com/depillis/T1DREU2020.git
 git push -u origin master
 
+..or if the directory is created online in Github, you can clone it using:
+
+git clone https://github.com/depillis/T1DREU2020.git
+
 …or push an existing repository from the command line
 git remote add origin https://github.com/depillis/T1DREU2020.git
 git push -u origin master
