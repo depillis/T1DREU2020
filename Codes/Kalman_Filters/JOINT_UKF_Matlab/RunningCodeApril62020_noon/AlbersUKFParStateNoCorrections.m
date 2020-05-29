@@ -1,0 +1,236 @@
+% Authors: LdeP
+% Update LdeP: April 6, 2020 - taking out the corrections to keep positive definiteness - they don't seem to help.
+% Update LdeP: April 6, 2020 - The parameter estimation is incorporated. Be careful not to make measurement noise too large, or we run into sigma point value problems. For the process noise, don't allow that to be too large either. The process noise for the parameters can be very small.
+% Update LdeP : April 6, 2020 - trying again to get Parameter values incorporated into the Kalman filter.
+
+% Original Date: March 14, 2020
+% Summary: UKF implementation of Albers study 2018
+
+% Update: March 31, 2020
+% Updates: LdeP Working to test alternately spaced sampling times
+
+% Update: April 1, 2020 LdeP
+% Using the "uneven data sample" general structure to allow for an even data sample.
+
+% Update: April 2, 2020 LdeP
+% The baseline code here is for "even data sample."
+% I will attempt to estimate parameters as well as states.
+% Albers 2017 fits 3 parameters:
+% E (= 0.2) l/min : insulin exchange rate between remote and plasma compartments
+% Vi (= 11) l : interstitial volume
+% ti (= 100) min : time constant for remote insulin degradation
+% Will attempt a joint UKF here - so append the three params to the state vector
+
+% Updates: LdeP March 2020 - working to fix the large filter shift
+% March 25, 2020 - filter shift fixed:
+% LdeP: The problem is the scaling of the Glucose (3rd state)
+% When we call the AlbersODE function, we need to rescale to
+% compute total glucose, and then we need to scale back again
+% to do the fits with glucose per dL so that we match the "data."
+% Update: LdeP March 30, 2020 - experimenting to see what happens when we
+% use the UKF implementation parameters given by Albers 2017 paper in
+% supplement 1 (Albers2017S1Appendix.pdf).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+
+% INITIALIZE PARAMETERS AND INITIAL STATES
+
+% LdeP Read in the Albers dual UKF algorithm parameters from the 2017 paper
+% Rv is the Assumed process noise covariance matrix
+% Rn is the Assumed measurement noise covariance matrix 
+AlbersParamsForUKFAlgorithmFrom2017AppendixS1; 
+
+% Initial conditions taken from Albers code
+% I_p = 200
+% I_i = 200
+% G = 12000 <-- LdeP This is total glucose (mg)
+% h_1 = 0.1
+% h_2 = 0.2
+% h_3 = 0.1
+% LdeP Append paramter ICs
+E = 0.2;  % (= 0.2) l/min : insulin exchange rate between remote and plasma compartments
+Vi = 11;  % (= 11) l : interstitial volume
+ti = 100; %  (= 100) min : time constant for remote insulin degradation
+% initialStateGuessODE = [200; 200; 12000; 0.1; 0.2; 0.1]; %LdeP This is the same set of initial values used in the Albers code.
+initialStateGuessODE = [200; 200; 12000; 0.1; 0.2; 0.1; E; Vi; ti]; %LdeP This is the same set of initial values used in the Albers code. The parameter value are set to their actual value used for simulations.
+
+NumberOfStates = numel(initialStateGuessODE); %Ldep keep track of the number of states you have (9 states means we are also tracking parameters)
+
+% SPECIFY INITIAL and FINAL TIME IN MINUTES
+timeInitial = 0; %LdeP ODE is time invariant, so we can start at 0
+%timeFinal = 12960; % t = 9 days worth of minutes = 12960 minutes
+% timeFinal=500; %LdeP Try a different length of time. Albers went to over 1200.
+timeFinal=500; %LdeP figure out sigma point issue
+
+% SOLVE FOR TRUE SOLUTIONS before setting up the UKF (we can test UKF against these "true" solutions)
+%[timeSteps,xTrue]=ode45(@AlbersODEwParams,timeVector,initialStateGuessODE);
+[timeSteps,xTrue]=ode45(@AlbersODEwParams,[timeInitial:1:timeFinal],initialStateGuessODE); %LdeP Force timestep 1
+
+
+% GET SAMPLE TIMES ... LdeP in progress
+% LdeP To get randomly spaced sample times, change T below
+T = 1; % [s] Filter sample time
+% T = randi(15); % [s] Filter sample time
+timeVector = 0:T:timeFinal; %LdeP Fiddling with the time vector
+
+% UNEVEN DATA SAMPLE - Uncommented in the Uneven data sample code.
+% LdeP Trying out a time vector with random sampling times
+% Downloaded randspace from MathWorks
+% Note that you may get fewer sample points than you specify if your
+% MaxTimeStep is too large compared to timeFinal - randspace will just cut
+% off the entries that get too large. So you need to be careful that
+% dimensions work out when you use randspace. There is likely a better way
+% to generate a monotonically increasing list of numbers with random
+% intervals between them.
+%
+% NoSamples=100;
+% MaxTimeStep=8; % Maximum number of minutes we might go before doing another glucose test
+% Trandstepvec=ceil(randspace(0,NoSamples,timeFinal,[1,MaxTimeStep]));
+
+% EVEN DATA SAMPLE - allow Trandstepvec simply to equal the timeVector
+Trandstepvec = timeVector+1; %LdeP Add 1 so the timestep vector starts at 1
+NumSamples = numel(Trandstepvec); %LdeP Number of actual samples taken
+
+
+% System has 10L of glucose = 100dL
+% We compute total mg of glucose in system
+% but plot mg dL^(-1)
+% So we have to divide glucose by 100 before plotting
+xTrueGlucosePerDL = xTrue(:,3)./100; %LdeP Save glucose measure in ml/dL
+
+
+% Moved construction of filter to input different initial state guesses
+% This allows UKF and yMeas to start at same initial values
+% LdeP Append parameters April 2020
+% initialStateGuessUKF = [200; 200; 120; 0.1; 0.2; 0.1; E*0.98; Vi*1.01; ti*0.98]; %LdeP State vector with glucose scaled to mg/dL
+initialStateGuessUKF = [200; 200; 120; 0.1; 0.2; 0.1; E*0.25; Vi*1.5; ti*0.5]; %LdeP State vector with glucose scaled to mg/dL; Parameter value initial state guesses are deliberately scaled away from their "actual" values, to simulate a reasonable guess and see how well we do with getting parameter values to converge to their true value.
+
+
+% CREATE THE UKF DATA STRUCTURE
+% NON-ADDITIVE MEASUREMENT NOISE - uncomment below
+%LdeP experimenting with additive an non-additive noise
+%LdeP The way we have written it, non-aditive measurement noise will produce a
+%much more smooth curve.
+% ukf = unscentedKalmanFilter(...
+%     @AlbersStateFcn,... % State transition function
+%     @AlbersNoiseFcn_NonAdd,... % Measurement function
+%     initialStateGuessUKF,...
+%     'HasAdditiveMeasurementNoise',false);
+
+% ADDITIVE MEASUREMENT NOISE - uncomment below
+%LdeP The way we have written it, additive measurement noise will produce a
+%much more jagged curve.
+ukf = unscentedKalmanFilter(...
+    @AlbersStateFcn,... % State transition function
+    @AlbersNoiseFcn_Additive,... % Measurement function
+    initialStateGuessUKF,...
+    'HasAdditiveMeasurementNoise',true);
+
+% LdeP: Making R large generates more noisy measurements - and estimates will
+% favor following the model rather than the measured data.
+% LdeP: smaller R -> closer estimate will match measured data
+% R = 0.2; % Variance of the measurement noise v[k]
+% R = 0.02;
+% R = 1.0;
+% R = .1;
+% sqrtR=1.5; %LdeP Standard Deviation of measurement noise
+% sqrtR = 5; %LdeP Supposing that measurments of blood glucose will deviate by + or -5 per dL.
+% LdeP March 30, 2020 - see what happens when we use Albers UKF parameters:
+% Rn - process noise covariance
+% Rv - measurement noise covariance
+sqrtR = sqrt(Rn); % LdeP Rn = measurment noise covariance from Albers2017 (currently Rn=1.26)
+% LdeP Comment: if sqrtR is too large, we'll run into sigma point problems
+% (a correlation matrix losing its positive definiteness).
+% sqrtR = 1.5; %LdeP use a smaller R while working on getting sigma points stable.
+ukf.MeasurementNoise = sqrtR^2; %LdeP Variance of measurement noise.
+
+% LdeP: Making Process Noise too large won't allow sufficient smoothing
+% The algorithm will think the "noisy" measurements are correct.
+% small noise values -> large gap between measured and UKF estimate
+
+% LdeP: March 30, 2020 - experimenting with using the process noise used in
+% Albers2017, Rv (a 6x6 matrix). When we add parameters, we probably make
+% the parameter process noise zero. Note, however, that the process noise
+% from Albers is really large, so that will essentially make the UKF follow
+% the measured data, and not the ODE model. The smaller the process noise,
+% the closer to the smoothed ODE model we will be.
+% But larger noise values ->  Our UKF estimate follows the "noisy" measure and won't smooth as much.
+% LdeP This process noise Rv from the Albers paper is just too large, and you to shrink it by a factor of something like 2000 to make the UKF process do any smoothing at all.
+% ukf.ProcessNoise = sqrt(Rv)/1000; %LdeP Making this smaller to adhere to the ODE model more than to the random data
+% ukf.ProcessNoise = diag([0.02 0.1 0.04 0.2 0.5 0.01]); %LdeP These are some random small process noise values
+% LdeP append zero process noise for the three parameters
+ukf.ProcessNoise = diag([0.02 0.1 0.04 0.2 0.5 0.01 0.0001 0.0001 .0001]); %LdeP These are some random small process noise values
+
+
+% CREATE TRUE GLUCOSE and Parameter SOLUTIONS VECTOR
+% rng(1); % Fix the random number generator for reproducible results
+rng('default'); % LdeP Matlab said use this
+% xTrue(:,1) only pulls out third vector in matrix
+% yTrue = xTrue(:,3); % Extract glucose, G
+% LdeP If we are going to measure more than just glucose, then yTrue has to have more dimensions
+% yTrue = xTrueGlucosePerDL; % Glucose is the only state we currently measure, G 
+yTrue = [xTrueGlucosePerDL xTrue(:,7) xTrue(:,8) xTrue(:,9)]; % Glucose G is the only state we currently measure, and we pretend we measure E, Vi, ti 
+
+% CREATE GLUCOSE and Parameter MEASUREMENT VECTOR
+% LdeP Now generate some sample measurements
+% yMeas = yTrue + some noise
+% Noise = StandardDeviation*(random value between -1 and 1)
+% sqrt(R): Standard deviation of noise
+%
+% LdeP If we set sqrtR (above) to be standard deviation of measurement noise,
+% then sqrtR^2 is the variance of measurement noise, and we add that to our
+% measure yMeas:
+%
+% NumberOfSamplePoints = size(yTrue); %LdeP just compute number of sample points once
+% yMeas = yTrue + (sqrtR*randn(NumberOfSamplePoints)); %This follows the Matlab help example
+%
+%LdeP Trying randomly spaced samples
+% NumberOfSamplePoints = NumSamples; %LdeP Prespecified number of sample points
+% LdeP Trandstepvec is the vector of randomly spaced sample times
+% LdeP 
+yMeas = yTrue(Trandstepvec,:) + (sqrtR*randn(NumSamples,1+3)); %This follows the Matlab help example
+
+%  LdeP Create vector of time step jumps
+%  DelT(k) = Trandstepvec(k+1)-Trandstepvec(k);
+DelT = Trandstepvec(2:end)-Trandstepvec(1:end-1);
+DelT(NumSamples)=(mean(DelT(1:NumSamples-1))); %LdeP Fake final time step to make DelT correct dimension
+% for k=1:numel(yMeas)
+for k=1:NumSamples
+
+    % ERROR: Difference between measure and the measure function (which is essentially the actual state variable)
+    % Let k denote the current time.
+    % Residuals (or innovations): Measured output - Predicted output
+    % ukf.State is x[k|k-1] at this point
+    e(k,:) = yMeas(k,:)' - AlbersMeasFcn(ukf.State);
+    
+    % PREDICT (could do this after the CORRECT step if we wish)
+    %LdeP: Try predicting first, and then correcting
+    % Note: It doesn't seem to matter in this example
+    % whether we predict then correct or correct then predict.
+    % Predict the states at time step k. 
+    %[xPredictedUKF(k,:), PPredictedUKF(k,:,:)]=predict(ukf);
+    % LdeP - send the size of the time step (for data sampling) through predict
+    [xPredictedUKF(k,:), PPredictedUKF(k,:,:)]=predict(ukf,DelT(k));
+
+    
+    % CORRECT
+    % Incorporate measurements at time k into state estimates using
+    % the "correct" command. This updates the State and StateCovariance
+    % properties of the filter to contain x[k|k] and P[k|k]. These values
+    % are also produced as the output of the "correct" command.
+    [xCorrectedUKF(k,:), PCorrected(k,:,:)] = correct(ukf,yMeas(k,:));
+
+
+    % Predict the states at next time step, k+1. This updates the State and
+    % StateCovariance properties of the filter to contain x[k+1|k] and
+    % P[k+1|k]. These will be utilized by the filter at the next time step.
+    % predict(ukf);
+    %[xPredictedUKF(k,:), PPredictedUKF(k,:,:)]=predict(ukf); %LdeP
+    
+end
+
+
+% %%%%%%%%%%%% PLOT %%%%%%%%%%%%%%%
+PlotMyUKFResults; %LdeP Call plotting script
+% 

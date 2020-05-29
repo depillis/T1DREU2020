@@ -1,0 +1,8 @@
+April 1, 2020
+
+LdeP
+
+In here I will attempt again to write new code to estimate both states and parameters. As of today, I just have code that can either take uniformly spaced or nonuniformly spaced data points.  I haven't started on the parameter passing yet.
+
+April 21, 2020:
+This code is based on Matlab's built in unscentedKalmanFilter.m code.
