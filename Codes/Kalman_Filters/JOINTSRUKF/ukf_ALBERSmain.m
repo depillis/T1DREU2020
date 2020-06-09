@@ -191,6 +191,8 @@ for k=1:Nsteps
   	xV(:,k) = x;% save estimate at iteration step k; x is the UKF computed
 		    % guess of our state function given the measured data, 
 		    % and the noise matrices
+    k        
+    
 end
 
 

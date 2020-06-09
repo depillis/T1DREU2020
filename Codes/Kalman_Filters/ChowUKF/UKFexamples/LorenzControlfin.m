@@ -26,7 +26,8 @@ Nstates=3;
 Npar=6;
 Nsubj=1;
 truepar = [10 28 8/3 26 34 32];
-Q = zeros(Nx,Nx);
+%Q = zeros(Nx,Nx);
+Q = [];
 
 alpha = 10e-4; % UKF : point scaling parameter
 beta = 2;  % UKF : scaling parameter for higher order terms of Taylor series expansion 
@@ -119,7 +120,8 @@ InfDS.obsdim = Ny;
 InfDS.Nsubj = Nsubj;
 InfDS.pNoiseAdaptpar = [];    %Parameters to shape process noise to speed convergence. Set to empty matrix if don't want to shape process noise.
 InfDS.NxNoPar = 3;	          %Number of state variables
-InfDS.partQflag = 0;	% A flag--if only estimating part of the state covariance matrix, set to 1; otherwise set to 0 
+InfDS.partQflag = 0;% A flag--if only estimating part of the state covariance matrix, set to 1; otherwise set to 0 
+InfDS.Xdim = 6;
 
 starttime = cputime;
 options=optimset('Display','final','TolX',1e-7,'MaxIter',10000,'MaxFunEvals',10000);

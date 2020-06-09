@@ -104,7 +104,7 @@ ukf.ProcessNoise = diag([0.02 0.1 0.04 0.2 0.5 0.01]);
 % shift.
 % ukf.ProcessNoise = diag([0.5 0.99 0.85 0.98 0.50 0.87]);
 
-rng(1); % Fix the random number generator for reproducible results
+rng('default'); % Fix the random number generator for reproducible results
 % xTrue(:,1) only pulls out third vector in matrix
 % yTrue = xTrue(:,3); % G -> rename in future yTrue = glucoseTrue
 yTrue = xTruePerDL; % G -> rename in future yTrue = glucoseTrue
