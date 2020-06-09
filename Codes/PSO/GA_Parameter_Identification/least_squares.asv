@@ -1,0 +1,13 @@
+function val=least_squares(k)
+alpha=k(1); beta=k(2);
+idx = 64:91;
+mytime = (0:length(idx))';
+load('HaresLynxData.mat')
+mydata(:,1) = Lotka_Volterra_Data(idx,2);
+mydata(:,2) = Lotka_Volterra_Data(idx,3);
+y0(1) = 21.5; y0(2) = 3.4;
+modelfun=@(t,x)Lotka_Volterra_Model(t,x,alpha,beta, gamma, delta);
+[t ycalc]=ode45(modelfun,mytime,y0);
+resid = (ycalc-mydata).*(ycalc-mydata);
+val = sum(sum(resid));
+end
