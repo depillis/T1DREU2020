@@ -3,3 +3,5 @@ This folder contains the modified codes, which are originally from the Chow-Ferr
 The code has been modified to do solely state estimation for the Lorenz system. The main file to run to perform the estimation and generate figures is LorenzControlfin.m
 
 This file does state estimation for a single subject.
+
+This code structure was then adapted and relied upon in order to create the Joint and Dual UKF Implementations which were then applied to the Lotka-Volterra and T1D systems.
