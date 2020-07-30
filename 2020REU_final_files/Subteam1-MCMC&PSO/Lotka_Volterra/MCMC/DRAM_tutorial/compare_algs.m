@@ -1,5 +1,24 @@
+%% Compare MH and DRAM parameter means
+% Authors:      M. Watanabe
+%
+% Date:         July 2020
+%
+% Descr:        Script to compare the means of the Lotka-Volterra
+%               parameters that result from the MH and DRAM
+%               parameterizations. This script generates bar charts of the
+%               means of the 4 parameters with error bars created from 1
+%               standard deviation.
+                
+%               Note that this code uses mean and standard deviations
+%               specifically from the workspaces "final_mh.mat" and
+%               "final_dram.mat". To plot means from different runs, use
+%               must specify values.
+%
+% Directions:
+
 % plotting mean parameter values with standard deviation bars
 % keep values at same magnitude together
+
 
 % MH                                  DRAM
 %                 mean         std          mean         std

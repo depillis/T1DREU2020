@@ -1,5 +1,16 @@
-% PDF overlay plots the parameter density functions from the Metropolis and
-% DRAM parmeterizations of the Lotka-Volterra system
+%% Overlaying parameter PDFs from various parameterizations
+% Authors:      M. Watanabe
+%
+% Date:         July 2020
+%
+% Descr:        Script to plot the individual parameter PDFs from the DRAM
+%               and MH parameterizations. Note that this script explicitly
+%               uses the data and variables from the workspaces
+%               "final_mh.mat" and "final_dram.mat". If comparison of
+%               subsequent parameterizations are desired, they must be
+%               specified.
+%
+ 
 clear all
 addpath('figures&results');
 

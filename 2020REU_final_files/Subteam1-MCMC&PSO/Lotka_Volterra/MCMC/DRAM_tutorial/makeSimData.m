@@ -1,3 +1,12 @@
+%% Simulate predator-prey data
+% Authors:      C. Catlett
+%
+% Date:         July 2020
+%
+% Descr:        Script to simulate hare and lynx data. The Lotka-Volterra
+%               ODE model is evaluated and then 10% Guassian noise is added
+%               to each data point.
+               
 function simData = makeSimData(params)
 % Load datasets
 load('HaresLynxData.mat')    % Loads as 'Lotka_Volterra_Data'

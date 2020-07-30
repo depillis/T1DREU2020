@@ -1,3 +1,12 @@
+%% Find initial parameter values and ranges using fmincon
+% Authors:      C. Catlett
+%
+% Date:         June 2020
+%
+% Descr:        Script to find initial parameter values for the
+%               Lotka-Volterra system. Uses MATLAB fmincon
+
+
 function [mse, params] = fitInitialParams(params, data)
 % Extract the initial guess for your parameters (must be in vector form)
 for i = 1:length(params)

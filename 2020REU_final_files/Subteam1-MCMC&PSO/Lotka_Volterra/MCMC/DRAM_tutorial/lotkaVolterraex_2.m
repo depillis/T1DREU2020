@@ -1,37 +1,65 @@
 %% Lotka-Volterra Model
-% Example code from https://mjlaine.github.io/mcmcstat/ex/algaeex.html
-% Edited to fit Lotka-Volterra model by Christina Catlett & Maya Watanabe (June 2020)
-% Uses functions lotkaVolterrasys.m, lotkaVolterrafun.m, lotkaVolterrass.m,
-% and mcmcstat library
+% Authors:      Edited by C. Catlett & M. Watanabe
+%               Original code from https://mjlaine.github.io/mcmcstat/ex/algaeex.html
+% Date:         June 2020
+%
+% Descr:        Script to estimate parameters of the Lotka-Volterra system.
+%               This script can be used to perform the Metropolis-Hastings
+%               and DRAM MCMC methods. Specify 'mh' or 'dram' in lines 87
+%               and 99.
+%               Uses functions lotkaVolterrasys.m, lotkaVolterrafun.m,
+%               lotkaVolterrass.m, and mcmcstat library
+%
+% Directions:   This script is meant to be run in full, ~15 min. User
+%               specifications exist for DRAM vs Metropolis-Hastings and
+%               naming the workspace.
 
 %% Loading and plotting observed data
 
 clear model data params options
-load HaresLynxData.mat
-addpath('mcmcstat');
+addpath('mcmcstat'); % add mcmcstat library
 
-% figure(1); clf
-% plot(Lotka_Volterra_Data(:,1),Lotka_Volterra_Data(:,2:end),'o-');
-% title('Observed Populations Over Time');
-% legend({'Hares', 'Lynx'},'Location','best');
-% xlabel('years');
+% Specify a unique file name to save work space at conclusion of the
+% parameter estimation
+filename = 'dram_LV_nopriors';
+
+% SELECT DATA
+% observed predator-prey data: d = 0
+% simulated data:              d = 1
+d = 0;
+
+if d==0
+    load HaresLynxData.mat
+    data = Lotka_Volterra_Data;
+else
+    load makeSimData.mat
+    data = simData;
+end
+
+% Plot original data
+figure(1); clf
+plot(data(:,1),data(:,2:end),'o-');
+title('Observed Populations Over Time');
+legend({'Hares', 'Lynx'},'Location','best');
+xlabel('years');
 
 
 %% Calculating model sum of squares
+% This is the likelihood function
 
-model.ssfun = @(theta, data) lotkaVolterrass(theta, Lotka_Volterra_Data);
+model.ssfun = @(theta, data) lotkaVolterrass(theta, data);
 
 %% Defining intial parameters
 % All parameters are constrained to be positive, uniformly distibuted.
 
-% % {'par1',initial, min, max, pri_mu, pri_sig, targetflag, localflag}
+% {'par1',initial, min, max, pri_mu, pri_sig, targetflag, localflag}
 params = {
     {'alpha', 0.7, 0, 1}
     {'beta',  0.1, 0, 1}
     {'gamma', 0.7, 0, 1}
     {'delta', 0.1, 0, 1}
     };
-%% Defining initial variance 
+%% Defining initial variance
 % We assume having at least some prior information on the
 % repeatability of the observation and assign rather non informational
 % prior for the residual variances of the observed states. The default
@@ -39,22 +67,26 @@ params = {
 % squared distribution (see for example Gelman et al.). The predator and
 % prey components have separate variances.
 
-[mse, minparams] = fitInitialParams(params, Lotka_Volterra_Data);
+% Minimize L-V ODE to find best initial parameter values
+[mse, minparams] = fitInitialParams(params, data);
 model.sigma2 = mse;
 params = minparams;
-%params = minparams;
+
+% Option to specify an informative prior function
 % model.priorfun = @(theta, thetamu, thetasig) logprior(theta, thetamu, thetasig);
+
+% Specify mean and var of prior distribution
 model.S20 = [1];
 model.N0 = [1];
 
-% matParams = [0.6253 0.1896 0.6607 0.0468];
-% Lotka_Volterra_Data = makeSimData(matParams);
+
 %% Burn-in iterations
-% First generate an initial chain.
+% First generate an burn-in initial chain.
 
 options.nsimu = 1e4;
 options.method = 'dram';
-[results, chain, s2chain, ss2chain]= mcmcrun(model,Lotka_Volterra_Data,params,options);
+[results, chain, s2chain, ss2chain]= mcmcrun(model,data,params,options);
+
 % plot burn-in chain
 plot(chain(1:options.nsimu,:));
 set(gca, 'FontSize', 20)
@@ -65,7 +97,8 @@ legend('alpha', 'beta', 'gamma', 'delta');
 
 options.nsimu = 5e5;
 options.method = 'dram';
-[results, chain, s2chain, ss2chain] = mcmcrun(model,Lotka_Volterra_Data,params,options,results);
+[results, chain, s2chain, ss2chain] = mcmcrun(model,data,params,options,results);
+
 % plot chain
 plot(chain(1:options.nsimu,:));
 set(gca, 'FontSize', 20)
@@ -105,8 +138,9 @@ modelfun = @(d,th) lotkaVolterrafun(d(:,1),th,d(:,2:3));
 % and calculate the predictive plots.
 
 nsample = 200;
-out = mcmcpred(results,chain,s2chain,Lotka_Volterra_Data,modelfun,nsample);
+out = mcmcpred(results,chain,s2chain,data,modelfun,nsample);
 
+% plot predator-prey predictions w/95% confidence interval
 figure(4); clf
 mcmcpredplot(out);
 set(gca, 'FontSize', 20)
@@ -115,9 +149,9 @@ hold on
 for i=1:2
   subplot(2,1,i)
   hold on
-  scatter(Lotka_Volterra_Data(:,1),Lotka_Volterra_Data(:,i+1), 30, 'b', 'filled', 'o');
+  scatter(data(:,1),data(:,i+1), 30, 'b', 'filled', 'o');
   set(gca, 'FontSize', 20)
-  ylabel(''); 
+  ylabel('');
   hold off
 end
 xlabel('year');
@@ -128,16 +162,16 @@ subplot(2,1,2)
 title('Predicted Lynx Population')
 %% Evaluation of Parameterization using mean squared error
 meanparams = results.theta;
-[mse_prey mse_pred] = LVmse(meanparams, Lotka_Volterra_Data);
+[mse_prey mse_pred] = LVmse(meanparams, data);
 
-predmod = lotkaVolterrafun(Lotka_Volterra_Data(:,1), meanparams, Lotka_Volterra_Data(:,2:end));
+predmod = lotkaVolterrafun(data(:,1), meanparams, data(:,2:end));
 
 for i=1:2
   subplot(2,1,i)
   hold on
-  plot(Lotka_Volterra_Data(:,1),Lotka_Volterra_Data(:,i+1),'s');
+  plot(data(:,1),data(:,i+1),'s');
   hold on
-  plot(Lotka_Volterra_Data(:,1), predmod(:,i));
+  plot(data(:,1), predmod(:,i));
   set(gca, 'FontSize', 20)
   xlabel('year');
   ylabel('population'); %title(titles{i});
@@ -149,6 +183,8 @@ title('Mean prediction for Hare population')
 subplot(2,1,2)
 title('Mean prediction for Lynx population')
 
+%% Save workspace variables
+save(filename);
 
 
 

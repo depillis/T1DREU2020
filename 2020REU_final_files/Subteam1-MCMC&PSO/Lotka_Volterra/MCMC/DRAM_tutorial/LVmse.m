@@ -1,3 +1,10 @@
+%% Mean square error
+% Authors:      M. Watanabe
+%
+% Date:         July 2020
+%
+% Descr:        Script to calculate mean square error
+
 function [mse_prey mse_pred] = LVmse(params, data)% Sum-of-squares function
 
 time   = data(:,1); 

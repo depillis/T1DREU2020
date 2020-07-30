@@ -20,12 +20,17 @@ Type 1 Diabetes Model - Delayed Rejection Adaptive Metropolis MCMC
 
        - T1D ODE model from Shtylla et al (2019).
 
-  Note: This script uses the mcmcstat library, but the main functions,
+
+  Directions:  This script has user-specified options that must be
+               designated before run. To run click on the "Run" button 
+               in the Editor tab of MATLAB. This script takes ~60mins to
+               parameterize a subset of 10 parameters
+
+Note: This script uses the mcmcstat library, but the main functions,
   mcmcrun and mcmcpred, have been altered to accomodate user preferences.
   These functions are now mcmcrun_custom (lines 431, 440) and
   mcmcpred_custom (line 480). The original functions still exist in the
   mcmcstat folder.
-
 ************
 helperFuncs
 ************
@@ -34,7 +39,7 @@ T1Dfun_r.m
 	sickEvents.m.
 	
 T1Dode_r.m
-	Models T1D system
+	Mathematical ODE model of T1D system
 	
 T1Dss_r.m
 	Calculates the sum of squares between the original data and the evaluated ODE for use 
@@ -44,12 +49,20 @@ T1Dfun_meanpred.m
 	Uses ode15s to evaluate T1D ODE system for the time frame 0:1:350 using the post-DRAM
 	mean parameter values. This is to visualize the overall behavior of the glucose
 	prediction.
+
+logprior.m
+	User-specified function for an informative prior function. Currently the prior is 
+	implemented as a LOG-NORMAL function
 ------------------------------------------------------------------------------------------		
 2) Data functions
 
+getData.m
+	creates data set to be used in parameterization routine: choose from Li et al., Mathews
+	et al., or simulated data.
+
 eFastparambounds.m
 	Finds +/-user-specified percentage above and below the eFast baseline values (An Do) 
-	for parameter range.
+	for parameter range. Uses the data from eFAST.mat
 
 initParams.m 
 	Uses fmincon to find best/minimal initial parameter values (not used here)
@@ -58,7 +71,7 @@ makeICbounds.m
 	Finds +/-user-specified percentage above and below the non-zero initial conditions 
 	for parameter range.
 	
-makepar_musig.m
+makepar_musig2.m
 	Function to extract parameter means and standard deviations (from UKF results).
 	For use in user-specified prior function.
 	
@@ -76,6 +89,13 @@ error_est.m
 	
 error_mse.m
 	Calculates the mean squared error.
+
+4) Misc functions
+
+filename.m
+	creates a unique string file name for saving post-routine workspaces
+
+
 
 ****************************
 validation&comparison_funcs	
