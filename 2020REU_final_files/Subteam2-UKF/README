@@ -1,0 +1,14 @@
+This folder contains all files related to the work subteam 2 has done with UKF's this summer:
+
+- Final_Codes: contains final versions of code for the T1D and Lotka-Volterra systems. Additionally, contains base code from Chow-Ferrer that was used as a starting point for implementing the Joint 
+and Dual UKF's
+
+- MATLAB_fig_files: contains Matlab ".fig" files for all of the figures that appear in the end of summer writeup. Files are named in the same way that they are in the overlear
+document
+
+-Presentations: contains pdf versions of the weekly presentations subteam 2 gave. Links to the google slides for editing purposes can be found in ***.
+
+-References: references specific to the UKF that were used in the writeup.
+
+-Weekly_Summaries: pdf versions of the weekly reports written by subteam2. The overleaf link to the repository with the raw ".tex" files can be found in ***.
+
