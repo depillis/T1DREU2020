@@ -1,4 +1,5 @@
 This folder contains the code to run the Dual UKF on the Lotka-Volterra system. The purpose of the files in this folder are as follow:
+- HaresLynxData.mat - the raw data which the UKF utilizes.
 - DualMain - the main script that needs to be run to do the estimation
 - UKF_Params - the function that performs ONE ITERATION of the parameters ukf
 - UKF - the function that performs ONE ITERATION of the states ukf
