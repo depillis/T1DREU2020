@@ -1,0 +1,8 @@
+This folder is meant for using the Joint UKF to perform estimation of states and parameters on the Lotka-Volterra system. The purpose of these files is the following:
+-JointMain.m - the main file to run the estimation
+-Lotka_Volterra_Model.m - contains set up of ODEs for the model that is used in the ODE solver throughout
+-MeasurementFcn.m - set up of the measurement function for the UKF
+-UKF.m - performs ALL iterations of the Joint UKF algorithm
+-Joint_UKF_Real_Data_Figures - produces figures found in the paper (as well as some extras)
+
+All other files are needed for some linear algebra and have not been altered since this code was received from Chow-Ferrer.

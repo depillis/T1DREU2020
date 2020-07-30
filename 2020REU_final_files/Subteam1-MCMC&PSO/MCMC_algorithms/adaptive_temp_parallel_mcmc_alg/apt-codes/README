@@ -1,0 +1,9 @@
+This is a Matlab/Octave implementation of the Adaptive Parallel 
+Tempering algorithm introduced in the research paper 
+
+   http://arxiv.org/abs/1205.1076
+
+The script file "test.m" provides a simple example how to use the
+implementation.
+
+The spatial imaging example in the paper is under the 'Ising' folder.

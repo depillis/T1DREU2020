@@ -1,0 +1,181 @@
+function main_adapt_g()  
+  %  Metropolis-Hastings MCMC sampler with 
+  %  adjusted (adaptive) proposal distribution q(q'|q,AB)
+  %  Here:
+  %    - S1 the sampler with a uniform proposal distribution
+  %    - S2 the new sampler with an adjustable proposal
+  %  Output: 
+  %    - acepteance_rate: 
+  %               mean S1,S2; standard deviation S1,S2  
+  %    - number of moved needed for convergance of a MC: 
+  %               means S1,S2; standard deviation S1,S2 
+  %    - ttest for difference in numbers of moves
+  global nr 
+  La=zeros(nr,2); 
+  Lm=zeros(nr,2);
+  call_settings();
+  call_global_C_X_Y(3); 
+  for i=1:nr
+    q=call_draw_sample_X(); % initial q
+    L=call_mhs(q);    % uniform g
+    L1=call_mhs1(q);  % adjusted g
+    La(i,:)=[mean(L(:,2)),mean(L1(:,2))]; % acceptance
+    Lm(i,:)=[size(L,1),size(L1,1)];       % nof moves
+  end
+  call_prn2(La,Lm);
+return
+
+
+function call_prn2(La,Lm)
+  fprintf('.accept_rate: m=%5.3f %5.3f, s=%5.3f %5.3f \n',mean(La),std(La))
+  [h,p]=ttest2(La(:,1),La(:,2));
+  fprintf('..h=%1i,p=%5.3f\n',h,p)
+  fprintf('.move_number: m=%5.1f %5.1f, s=%5.2f %5.2f \n',mean(Lm),std(Lm))
+  [h,p]=ttest2(Lm(:,1),Lm(:,2));
+  fprintf('..h=%1i,p=%5.3f\n',h,p)
+return
+
+
+function call_settings()
+  global nbin nb nr pmin
+  nbin=5; % nof bins in pfd of data X
+  nb=1000; % nof burn-in samples
+  nr=100; % nof runs
+  pmin=3; % to avoid extremal q
+return
+
+
+function q=call_draw_sample_X()
+  global X2
+  i=randi(size(X2,1),1);
+  q=X2(i);
+return
+ 
+
+function AB=call_get_AB(q) % must be simmetrical s in g
+  global pbin X1 num
+  if q<X1(1) || q>X1(end)
+    fprintf('..Warning! call_find_xs: q out of range X.\n')
+  end
+  i=1;
+  while i<=num && X1(i)<q
+    i=i+1;
+  end
+  i1=max(1,i-pbin);
+  i2=min(num,i+pbin);
+  a=X1(i1);
+  b=X1(i2);
+  s=min(q-a,b-q); % eqivalent to mirror
+  AB=[q-s,q+s];
+return
+
+
+function AB=call_get_uniform(q) % by call_mhs
+  global xmin xmax
+  s=min(xmax-q,q-xmin);
+  AB=[q-s,q+s];
+return
+
+
+function q1=call_get_q(AB)
+  q1=unifrnd(AB(1),AB(2));
+return
+
+
+function L=call_mhs(q) % Metropolis-Hasting (MH) MCMC sampler
+  global nb num
+  L=zeros(nb,3); 
+  AB=call_get_uniform(q);
+  q=call_get_q(AB);
+  T=struct('p',1,'v',1,'q',q,'c',[1 2],'t',[1 1]);
+  N=mc_split([],T,T(1).p,1:num);			
+  lik=rpt2_log_lik(N); 
+  T1=T;  
+  for i=1:nb 
+    if lik==0
+      L(i,:)=[lik,1,q];
+      break
+    end
+    q1=call_get_q(AB);
+    T1.q=q1;
+    N1=mc_split([],T1,T1(1).p,1:num);
+    lik1=rpt2_log_lik(N1);
+    r=exp(lik1-lik); 
+    if rand < r					 % accept?
+      accept=true;
+      T=T1;              % update 
+      q=q1;
+      lik=lik1;
+    else
+      accept=false; 
+      AB=call_get_uniform(q);
+    end
+    L(i,:)=[lik,accept,q];
+  end
+  L=L(1:i,:);
+return
+
+
+function L=call_mhs1(q) % new MH sampler with adjusted g 
+  global nb num
+  L=zeros(nb,3); 
+  AB=call_get_AB(q);
+  q=call_get_q(AB);
+  T=struct('p',1,'v',1,'q',q,'c',[1 2],'t',[1 1]);
+  N = mc_split([],T,T(1).p,1:num);			
+  lik=rpt2_log_lik(N); 
+  T1=T;  
+  for i=1:nb 
+    if lik==0
+      L(i,:)=[lik,1,q];
+      break
+    end
+    q1=call_get_q(AB);
+    T1.q=q1;
+    N1=mc_split([],T1,T1(1).p,1:num);
+    lik1=rpt2_log_lik(N1);
+    r=exp(lik1-lik); 
+    if rand < r					 % accept?
+      accept=true;
+      T=T1;              % update 
+      q=q1;
+      lik=lik1;
+    else
+      accept=false; 
+      AB=call_get_AB(q); % update AB  
+    end
+    L(i,:)=[lik,accept,q];
+  end
+  L=L(1:i,:);
+return
+
+
+function call_global_C_X_Y(md)
+  global C X Y  num xmin xmax  nbin pbin pmin X2 X1 
+  switch md
+    case 1
+      % debug mode
+    case 2
+      n=100;
+      X=[unifrnd(0.1,0.49,n,1); unifrnd(0.51,0.9,n,1)];
+    case 3
+      n=100;
+      sig=0.15;
+      X=[0.25+sig*randn(n,1); 0.75+sig*randn(n,1)];      
+      I=X>0 & X<1;
+      X=X(I);
+  end
+   q_opt=0.5;
+  Y=(X>q_opt)+1;
+  C=2;
+  num=size(Y,1);
+  xmin=min(X);
+  xmax=max(X);
+  pbin2=round(num/nbin); % bin size
+  if mod(pbin2,2)~=0 % when odd
+    pbin2=pbin2+1;
+  end
+  pbin=pbin2/2;
+  X1=sort(X,'ascend');   % for AB
+  X2=X1(pmin:num-pmin+1); % for initial q
+return

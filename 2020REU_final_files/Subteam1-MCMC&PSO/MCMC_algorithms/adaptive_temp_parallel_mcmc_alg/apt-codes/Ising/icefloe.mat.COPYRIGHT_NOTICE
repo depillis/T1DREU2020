@@ -1,0 +1,5 @@
+The data in the file "icefloe.mat" is from the file "icefloe.RData" in
+the R package PAWL (Parallel Adaptive Wang-Landau algorithm) by Luke
+Bornn and Pierre E. Jacob; see
+
+  http://cran.r-project.org/web/packages/PAWL/index.html
