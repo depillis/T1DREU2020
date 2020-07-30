@@ -5,7 +5,6 @@ function dx = Lorenz(x,par)
 %par=par';end
 
 dx = zeros(dim,nop);
-
 dx(1,:) = par(1,:).*(x(2,:)-x(1,:));
 dx(2,:) = par(2,:).*x(1,:) - x(2,:) -x(1,:).*x(3,:);
 dx(3,:) = -par(3,:).*x(3,:) + x(1,:).*x(2,:);
