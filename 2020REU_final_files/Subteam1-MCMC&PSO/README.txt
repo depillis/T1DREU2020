@@ -1,8 +1,8 @@
 Subteam1: MCMC & PSO
 ------------------------------------------------------------------------------------------
-	Student Collaborators: Christina Catlett & Maya Watanabe
-	HMC REU 2020	
+	Student Collaborators: Christina Catlett & Maya Watanabe	
 	Advisors: Profs. de Pillis (HMC), Shtylla (Pomona), Edholm (Scripps), and An Do (CGU)
+	HMC REU 2020: Parameter Estimation of T1D ODE Model
 	Funded by the NSF
 
 
@@ -29,8 +29,6 @@ The MCMC folder contains 3 different techniques
 	1) We tuned the astrostats tutorial to use on the L-V system
 	2) Using the mcmcstat library, we were able to implement a DRAM parameterization
 	3) We parameterized using the built-in MATLAB function "mhsample"
-
-While we did not explicitly use these codes, we think they are useful training tools.
 	
 ****************
 MCMC_algorithms
@@ -39,14 +37,14 @@ This folder contains subfolders of code (written by various authors) for other M
 techniques
 	1) Adaptive MCMC
 	2) Adaptive Tempered Parallel MCMC
-	3) Another example for parameterizing a biological ODE
-	
+	3) Comparison of various MCMC methods
+
+While we did not explicitly use these codes, we think they are useful training tools.
+
 **********************
 MJLaine_Algae_example
 **********************
-This folder contains codes written by M. J. Laine (author of the mcmcstat library) that
-uses the mcmcstat library to parameterize a biological algae ODE model. This is the
-tutorial which we used to help us learn how to implement the DRAM MCMC method.
+This folder contains codes written by M. J. Laine that uses the mcmcstat library to parameterize a biological algae ODE model. This is the tutorial which we used to help us learn how to implement the DRAM MCMC method.
 
 ****
 T1D

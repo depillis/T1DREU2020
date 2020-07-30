@@ -1,6 +1,7 @@
-% Script to plot pivot points of 
+% Script to plot pivot points of 9 acute mice raw data
 % load data
 addpath('../T1D_data_files/Lietal_data')
+
 dat2 = readmatrix('dat2.csv');
 dat2 =[dat2(:,1)*7 dat2(:,2)];
 dat2 = sortrows(dat2);
@@ -12,10 +13,6 @@ dat3 = sortrows(dat3);
 dat4 = readmatrix('dat4.csv');
 dat4 =[dat4(:,1)*7 dat4(:,2)];
 dat4 = sortrows(dat4);
-
-% dat5 = readmatrix('dat5.csv');
-% dat5 =[dat5(:,1)*7 dat5(:,2)];
-% dat5 = sortrows(dat5);
 
 dat6 = readmatrix('dat6.csv');
 dat6 =[dat6(:,1)*7 dat6(:,2)];

@@ -5,3 +5,7 @@ Duplicates of this folder (with some modifications) also exist throughout the su
 
 We have specified this folder for unmodified versions of the data that we use in the 
 two parameterizations of T1D: PSO and DRAM MCMC.
+
+Duplicates of these folders exist in other sub-directories within Subteam1-MCMC&PSO directory
+
+NOTE that we only use Lietal data for the T1D parameterizations

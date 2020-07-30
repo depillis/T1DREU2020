@@ -1,4 +1,5 @@
 RUN LOG
+This is an informal log of the runs of the script T1D_execute.m. It contains general information about the initial conditions used for each run
 
 JUN 23
 3 runs with Version 2 parameter set
@@ -6,9 +7,6 @@ JUN 23
 
 run4 with Version 1 parameter set
 - must run with parameters printing in T1Dfun_r.m
-
-Jun 24
-
 
 Jun 25
 run1 & run2 - 7 important + eta_vary + time parameters; only use model.sigma2 (mse); progressive
@@ -22,4 +20,4 @@ EVIDENCE:
 When I run DRAM on all 41, it cannot accept any parameters. All but the first candidate set are rejected so rejection rate is 0.9999 and the whole algorithm takes < 10 sec. However, when I decrease the number of parameters (15), DRAM is able to search and accept the parameter space. I think we are running into that curse of dimensionality here and I am not really sure how to address this, nor am I sure of what the upper limit of number of parameters should be
 
 July runs
-- run with Li data only - averaged
+- run with Li data only - averaged, Mice 3, 6, 11

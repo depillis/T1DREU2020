@@ -1,6 +1,6 @@
 figures
 
-This folder contains the figures from the HMC REU Summer 2020 final report.
+This folder contains the figures (.fig and .png files) from the HMC REU Summer 2020 final report.
 The folders are divided by the data with which the DRAM parameterization was run on
 
 average: folder containing figures from the parameterization with averaged acute data
