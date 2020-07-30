@@ -4,11 +4,11 @@ This folder contains all files related to the work subteam 2 has done with UKF's
 and Dual UKF's
 
 - MATLAB_fig_files: contains Matlab ".fig" files for all of the figures that appear in the end of summer writeup. Files are named in the same way that they are in the overleaf
-document. IMPORTANTLY, THE README IN THIS FILE CONTAINS INFORMATION ON WHICH FILES SPECIFICALLY PRODUCE EACH FIGURE LOCATED THERE
+document. IMPORTANTLY, THE README IN THIS FILE CONTAINS INFORMATION ON WHICH FILES SPECIFICALLY PRODUCE EACH FIGURE LOCATED THERE.
 
--Presentations: contains pdf versions of the weekly presentations subteam 2 gave. Links to the google slides for editing purposes can be found in ***.
+-Presentations: contains pdf versions of the weekly presentations subteam 2 gave. Links to the google slides for editing purposes can be found in README within this folder.
 
 -References: references specific to the UKF that were used in the writeup.
 
--Weekly_Summaries: pdf versions of the weekly reports written by subteam2. The overleaf link to the repository with the raw ".tex" files can be found in ***.
+-Weekly_Summaries: pdf versions of the weekly reports written by subteam2. The overleaf link to the repository with the raw ".tex" files can be found in in the README within this folder.
 
