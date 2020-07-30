@@ -1,0 +1,9 @@
+Final code versions for various biological systems can be found in this folder.
+
+-BaseChowUKFCodesModified: The starting Chow-Ferrer implementation of the UKF that all code this summer was based off of. Specific information related to what this code does
+can be found within this folder's README as well.
+
+-Predator_Prey: Code for the Joint and Dual UKF implementations on the Lotka-Volterra Predator Prey system.
+
+-T1D: Code for the Joint and Dual UKF implementations on the T1D model that was studied this summer.
+
