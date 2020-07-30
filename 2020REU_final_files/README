@@ -1,1 +1,34 @@
+This folder contains the finalized work of the 2020 Summer REU Team at Harvey Mudd, working under advisors Prof. de Pillis, Prof. Shtylla, Prof. Edholm, and
+An Do. For information pertaining to the work in this folder you can reach the contributors at the following emails:
 
+- Christina Catlett:
+- Daniel Shenker: dshenke1@jhu.edu
+- Rachel Wander:
+- Maya Watanabe: 
+
+****** is the pdf version of the end of summer report produced by the team.
+
+The remaining folder structure is as follows:
+
+--------Shared_Presentations---------
+This folder contains presentations made collaboratively by both subteam 1 and subteam 2. These are presentations made to the general REU cohort as well as
+during the writing process. In addition to the presentations, here you can find links to editable versions of the Google Slides documents
+
+--------Shared_References---------
+This folder contains references used by both subteams in the final report. References that are specific to only one of the subteams can be found in their respective
+sub folders.
+
+--------Subteam1-MCMC&PSO---------
+This is the folder containing all work completed by Subteam 1 this summer. See the README within this folder for details regarding folder structure and additional specifics
+related to their work.
+
+--------Subteam2-UKF---------
+This is the folder containing all work completed by Subteam 2 this summer. See the README within this folder for details regarding folder structure and additional specifics
+related to their work.
+
+Throughout work this summer, up until the final writing process, each subteam utilized their own Overleaf repository. Links to these repositories can be found here along with
+the link to the repository where work for the final writeup was completed.
+
+Subteam 1:
+Subteam 2: https://www.overleaf.com/4824991297hdnptmrdpbst
+Final Writeup: 
