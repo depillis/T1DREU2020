@@ -1,0 +1,4 @@
+This folder contains codes to run UKFs on the Lotka-Volterra Predator-Prey system using real world Hares-Lynx data.
+
+Dual - code to use the Dual UKF
+Joint - code to use the Joint UKF
