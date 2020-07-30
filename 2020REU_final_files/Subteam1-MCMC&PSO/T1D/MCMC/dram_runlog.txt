@@ -1,0 +1,25 @@
+RUN LOG
+
+JUN 23
+3 runs with Version 2 parameter set
+- must run with parameters printing in T1Dfun_r.m for DRAM to accept candidates
+
+run4 with Version 1 parameter set
+- must run with parameters printing in T1Dfun_r.m
+
+Jun 24
+
+
+Jun 25
+run1 & run2 - 7 important + eta_vary + time parameters; only use model.sigma2 (mse); progressive
+run3 & 4 - 7 important + eta_vary parameters; only use model.sigma2; progressive
+run5 - 7 important + eta_vary parameters; use model.sigma2 + model.S20 + model.N0; progressive
+    - main difference is that in the dram chain, sigma2chain is now being saved where previously it was not
+
+=================================================
+Noticing that we cannot really parameterize all 41 parameters --> I think the parameter space is too large for DRAM to search/handle
+EVIDENCE:
+When I run DRAM on all 41, it cannot accept any parameters. All but the first candidate set are rejected so rejection rate is 0.9999 and the whole algorithm takes < 10 sec. However, when I decrease the number of parameters (15), DRAM is able to search and accept the parameter space. I think we are running into that curse of dimensionality here and I am not really sure how to address this, nor am I sure of what the upper limit of number of parameters should be
+
+July runs
+- run with Li data only - averaged

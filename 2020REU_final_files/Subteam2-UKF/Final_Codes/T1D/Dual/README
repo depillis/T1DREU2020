@@ -1,0 +1,44 @@
+This folder contains code to run the Dual UKF on the T1D model using Li data. Additionally, it includes files to produce many of the figures seen in the final writeup. The files do the following:
+- AcutevsProgressiveFigure - produce figure that shows difference in shape between acute and progressive mice.
+
+- calculateMSEAllMice - prints out MSE values for all mice based on fits with parameter values determined by csv file which is specified in the script
+
+- determineError - function to calculate Least Squares error for a glucose fit
+
+-fig_2_3_4_5_ODE/Joint - these two files describe the ODE system first for the Dual UKF and then for the Joint UKF (slight change in how eta is treated between the two)
+
+-fig_2_3_4_5_Parameters - script called to load model parameter values that are constant and not being estimated (wave strength for example)
+
+- Fit_Then_Average_Figure - script to produce figure that shows quality of Dual, Joint, and PSO when using fit-then-average approach on averaged data
+ 
+- Main_Get_Best_Params_Individual - this is the main file that should be run to get the best parameter sets for each mouse based on the dual UKF. Please note that this file takes a very significant amount of time to run to completion (approx 6 hours) so modifications can be made to run on only certain mice or for less iterations (current default is 5)
+
+- MeasurementFcn and MeasurementFcn2 - measurement function matrices for the Dual
+
+-Mouse6_ComparisonFigure_Creation - Script to produce figure showing performance of Joint, Dual, PSO, and MCMC on mouse 6
+
+-Param_Distributions_GivenCSV - Script to produce histograms of key parameters and to fit normal distributions to those parameters 
+
+-ParamChange - can be used to calculate change in parameter values from starting point
+
+-Acute_Fits - run to produce figure showing the Dual fits for all the acute mice
+
+-Progressive_Fits - run to produce figure showing the Dual fits on the progressive mice
+
+-States_Simulation_Plots - run to produce figure showing the simulated states for the key parameters chosen in paper.
+
+-No_Wave_Glucose_Comparison - run to produce figure of the glucose simulations under each algorithm's final parameters when wave turned off.
+
+-States_Simulation_Plots_ALL - run to produce figure of all 12 states (can be manipulated to be with or without wave)
+
+- Run_On_Li_Avg - code to run Dual UKF on the Li averaged dataset
+
+- T1D_DualUKF_Figures - function to produce some figures about the Dual UKF on individual mice
+
+-Parameter_BoxPlots - run to produce box plots for key parameters
+
+- UKF_Avg_Data_Comparison_Figure - script to compare performance of averaging techniques for Joint, Dual, and PSO
+
+- UKF_Params - Function to perform a SINGLE iteration of the parameter UKF
+
+-UKF - Function to perform a SINGLE iteration of the states UKF

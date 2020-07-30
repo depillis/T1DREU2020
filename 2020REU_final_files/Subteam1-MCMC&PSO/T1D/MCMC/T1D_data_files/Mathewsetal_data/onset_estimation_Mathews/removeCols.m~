@@ -1,0 +1,14 @@
+function data =  removeCols(data)
+for i = 2:2:(length(data(1,:)))
+    col = data(:, i);
+    col
+    isnan(col)
+    ones(length(data(:,1)), 1)
+    ones(length(data(:,1)), 1) == isnan(col)
+    if ones(length(data(:,1)), 1) == isnan(col)
+       colstodelete(i)
+       data(:, i) = []; 
+       data(:, i-1) = [];
+    end
+end
+end

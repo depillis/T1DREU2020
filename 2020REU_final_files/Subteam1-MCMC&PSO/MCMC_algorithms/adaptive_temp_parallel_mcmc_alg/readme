@@ -1,0 +1,10 @@
+There are two supplementary files:
+
+- proofs.zip      LaTeX-sources including the supplementary material
+- apt-codes.zip   Matlab implementation of the proposed algorithm
+
+Note: the supplement-pt.tex contained in proofs.zip requires to be
+compiled in the same directory with the main document in order to get
+the cross-references correct.
+
+
