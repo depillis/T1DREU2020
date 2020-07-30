@@ -1,4 +1,5 @@
 This folder is meant for using the Joint UKF to perform estimation of states and parameters on the Lotka-Volterra system. The purpose of these files is the following:
+-HaresLynxData - the raw data the UKF utilizes
 -JointMain.m - the main file to run the estimation
 -Lotka_Volterra_Model.m - contains set up of ODEs for the model that is used in the ODE solver throughout
 -MeasurementFcn.m - set up of the measurement function for the UKF
