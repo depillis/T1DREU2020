@@ -1,28 +1,38 @@
 This folder contains code to run the Joint UKF on the T1D model using Li data. Additionally, it includes files to produce many of the figures seen in the final writeup. 
 The files do the following:
 
-all_values_important_multiple_eta.csv - contains a record of all the best fit parameters for each mouse
+all_values_important_multiple_eta.csv - contains a record of all the best fit parameters for each mouse. Mice 1-8 worked best with an eta value of 0.01 and mice 9-11 worked best with an eta value of 0.018.
 
 dat1.csv-dat11.csv - data for Mice 1-11 from Li et al
 
 Get_Initial_Conditions.m - gets the state values for the ODE system at a given time point
 
-Joint_allparams.m - main file, runs the Joint UKF for all parameters in the system on the Li data for specified mouse and number of runs. (eta is constant)
+Joint_allparams.m - main file, runs the Joint UKF for all parameters in the system on the Li data. (eta is constant) You must specify the mouse and number of runs. 
+You can only run some of the mice for a specified number of runs before the ODE solver becomes stuck at which point it will run forever (or for a really long time I only ever waited a couple hours.)
+Therefore, I would not suggest running it more than two times in a row, since all the mice hit their best set of parameters (using mse) on the first or second run anyways. 
 
-MeasurementFcn.m - measurement function for the UKF, returns balue of glucose
+MeasurementFcn.m - measurement function for the UKF, takes in vector of all states and all parameters and returns value of glucose
 
-ODE_allparams.m - 12 equation ODE system for T1D, value of eta is 0.01
+ODE_allparams.m - 12 equation ODE system for T1D, value of eta is 0.01. This ODE requires an input of 12 states and 41 parameters. 
+Additionally, only one mu parameter is used, the other is a placeholder value only. 
 
-ODE_allparams2.m - 12 equation ODE system for T1D, value of eta is 0.018
+ODE_allparams2.m - 12 equation ODE system for T1D, value of eta is 0.018. This ODE requires an input of 12 states and 41 parameters.
+Additionally, only one mu parameter is used, the other is a placeholder value only. 
 
 Produce_Full_Figure_joint.m - produces figures with all acute and progressive results from paper
+This creates the figures joint_acute_all.fig and joint_progressive_all.fig
 
 T1D_ODE_Parameters.m - file containing all the baseline parameter values. Used for initialization
 
-UKF_allparams.m - code to run the Joint UKF
+UKF_allparams.m - code to run the Joint UKF for the T1D ODE system
 
 GetBoxPlots.m - code to create boxplots for parameters that change more than 1%
+This creates the fig file: joint_param_boxplots.fig It is a collection of boxplots for all the parameters that change more than 1%. 
+These parameters are specified within the function, not calculated. A list is availble in the paper. 
 
-StateSimulations.m - code to create plots of all the simulated states for the estimated parameters
+StateSimulations.m - code to create plots of all the simulated states for the estimated parameters. 
+This creates the fig files: Joint_mouse6_allstates.fig, Joint_mouse6_subsetofstates.fig, and Joint_mouse6_allstates_nowave.fig.
+Currently this is set up to run these figures for mouse 6 only, however it can run the figures for the other mice. If you wish to run figures
+for mice 9-11, make sure to use ODE_allparams2 so that you are using the correct eta value. 
 
 All other files are simply used for simple algebra purposes.
