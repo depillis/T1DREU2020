@@ -2,10 +2,10 @@ MATLAB code to parameterize a simple linear model with unknown noise using Marko
 
 The goal of this tutorial is to fit 3 parameters to a linear model: a0, the y-intercept, a1, the slope, and ysig, unknown Gaussian noise, to produce a posterior density function for each of the parameters. The linear model itself is fit to 10 simulated datapoints. Prior distributions are assumed to be uniform, and we use a Gaussian likelihood function. Running astrostats.m will simulate sample data, run the MCMC algorithm, and produce plots of the Markov chains and parameter density functions, pausing between plots. Functions 2-6 are called within Function 1. Functions 8 and 9 are used to sample from the final parameter PDFs produced by astrostats_tutorial.m and plot some proposed solutions to the linear model.
 
-*Note that function sampleprior.m is not used within our tutorial but can be implemented if the user wishes to have a prior function with a gamma distribution
+* Note that function sampleprior.m is not used within our tutorial but can be implemented if the user wishes to have a prior function with a gamma distribution
 
 1) astrostats_tutorial.m:
-A tutorial to fit parameters to a linear model with unknown noise using Bayesian techniques a Metropolis-Hastings MCMC algorithm. We simulate data and compute the parameter PDFs using the following internally implemented functions:\
+A tutorial to fit parameters to a linear model with unknown noise using Bayesian techniques a Metropolis-Hastings MCMC algorithm. We simulate data and compute the parameter PDFs using the following internally implemented functions:
 
 The following functions produce components of the posterior probability from Baye's Theorem
 
@@ -55,3 +55,6 @@ Final value of variable thetaMean from astrostats_tutorial.m, giving the mean-va
 
 10.6) sample_lines_from_paramDen.fig:
 MATLAB figure file overplotting 10 possible linear fittings sampled according to the calculated posterior distributions against simulated data
+--------------------
+astrostats_tutorial_section3.m
+Contains the MATLAB translated script for the R code in section 3 of the C.A.L Bailer Jones paper. This paper can be found in the References/MCMC folder: Astrostats_bayesian_methods_param_estimation.pdf
