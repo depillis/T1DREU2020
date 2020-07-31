@@ -8,4 +8,6 @@ This folder contains the code to run the Dual UKF on the Lotka-Volterra system. 
 - MeasurementFcn - Function that resembles the measurement matrix in the UKF
 - Dual_UKF_RealData_Figures - produces the dual UKF figures seen in the write up as well as a few extras
 
+Note that running DualMain.m will produce all figures automatically and the run time is pretty fast, around 10 seconds or so.
+
 All other files are necessary for the main file to run but have not been extensively edited since received from Chow-Ferrer.
