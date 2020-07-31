@@ -31,6 +31,16 @@ Note: This script uses the mcmcstat library, but the main functions,
   These functions are now mcmcrun_custom (lines 431, 440) and
   mcmcpred_custom (line 480). The original functions still exist in the
   mcmcstat folder.
+  
+GENERATES THE FIGUERES/FILES
+...traceplot.fig
+...chainstats.txt
+...den.fig
+...meanpred.fig
+...modpred.fig
+...predModData.csv
+...visvalfull.fig
+
 ************
 helperFuncs
 ************
@@ -95,8 +105,6 @@ error_mse.m
 filename.m
 	creates a unique string file name for saving post-routine workspaces
 
-
-
 ****************************
 validation&comparison_funcs	
 ****************************
@@ -125,6 +133,7 @@ PDFoverlay.m
 	Script to plot overlaid parameter PDFs from 
         parameterizations using from Mice 3, 6, 11 and 
         averaged data
+    GENERATES PDFS...fig
 ------------------------------------------------------------------------------------------
 3) Biological Checks
 
@@ -133,11 +142,13 @@ StateOverlay.m
 	from Mice 3, 6, 11 and averaged data parameterizations in
 	order to determine biological feasibility of parameter
 	values.
+	GENERATES allState...fig
 
 *********************
 writeUp_figs&results
 *********************
-Contains the figures and workspaces that were used to create the figures in the Summer 2020 final report
+Contains the figures and workspaces that were used to create the figures in the Summer 
+2020 final report
 
 ********************
 past_run_workspaces
@@ -159,9 +170,8 @@ mcmcstat
 *********
 MATLAB library (M.J. Laine) containing functions to run DRAM parameterization.
 NOTE: This script uses the mcmcstat library, but the main functions,
-  mcmcrun and mcmcpred, have been altered to accomodate user preferences.
-  These functions are now mcmcrun_custom (lines 431, 440) and
-  mcmcpred_custom (line 480). The original functions still exist in the
+  mcmcrun and mcmcpred, have been altered to accomodate user preferences. These functions 
+  are now mcmcrun_custom and mcmcpred_custom. The original functions still exist in the
   mcmcstat folder.
 
 

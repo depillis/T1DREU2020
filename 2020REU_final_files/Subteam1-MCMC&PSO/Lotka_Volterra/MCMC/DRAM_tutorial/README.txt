@@ -4,8 +4,9 @@ This folder contains data and functions to parameterize the Lokta-Volterra preda
 model. We use a script adapted from an algae example by M.J. Laine and rely on the 
 functions from the mcmcstat library.
 
-***Note that code from this folder was used to generate results and figures in the final REU write up.***
--------------------------------------------------------------------------------------------------
+***Note that code from this folder was used to generate results and figures in the final 
+REU write up.***
+------------------------------------------------------------------------------------------
 lotkaVolterraex_2.m
  Authors:      Edited by C. Catlett & M. Watanabe
                Original code from https://mjlaine.github.io/mcmcstat/ex/algaeex.html
@@ -25,7 +26,7 @@ lotkaVolterraex_2.m
 
 
 	
-lotkaVolterraex_2.m CALLS functions:
+lotkaVolterraex_2.m CALLS THE FUNCTIONS:
 
 	lotkaVolterrafun.m
 		Function to solve the ODE
@@ -53,7 +54,19 @@ lotkaVolterraex_2.m CALLS functions:
 	logprior.m
 		Function for a user-specified prior function. Default in this implementation is a
 		log-uniform prior.
--------------------------------------------------------------------------------------------------
+		
+GENERATES FIGURES/FILES for Metropolis and DRAM parameterization routines
+/finalResults&Workspaces/figures
+...burninchain.fig
+...chain.fig
+...den.fig
+...meanpred.fig
+...samples.fig
+...meanpred.fig
+...modpred.fig
+...chainstats.txt
+
+------------------------------------------------------------------------------------------
 DATA functions & files
 makeSimData.m
 	Creates simulated data by solving the LV ODE and adding 10% Gaussian noise
@@ -62,16 +75,25 @@ makeSimData.m
 HaresLynxData.mat
 	Raw hare and lynx population data from The Hudson Bay Company study (reference in
 	References/MCMC directory)
--------------------------------------------------------------------------------------------------
-COMPARISON functions: these scripts are used to compare the results of a Metropolis-Hastings parameterization with a DRAM parameterization. Each is a self-contained script and must be run individually to produce desired figures.
+------------------------------------------------------------------------------------------
+COMPARISON functions: these scripts are used to compare the results of a 
+Metropolis-Hastings parameterization with a DRAM parameterization. Each is a 
+self-contained script and must be run individually to produce desired figures.
 
 compare_algs.m
-	Function to plot clustered bar charts of the means of parameters with error bars created with 	1 standard deviation
+	Function to plot clustered bar charts of the means of parameters with error bars 
+	created with 1 standard deviation
+	GENERATES paramComp.fig figures - /finalResults&Workspaces/figures/comparison
 
 PDFoverlay.m
-	Script to plot the individual parameter PDFs from the DRAM and MH parameterizations. Note 	that this script explicitly uses the data and variables from the workspaces "final_mh.mat" 	and "final_dram.mat". If comparison of subsequent parameterizations are desired, they must be
-	specified.
--------------------------------------------------------------------------------------------------
+	Script to plot the individual parameter PDFs from the DRAM and MH parameterizations. 
+	Note that this script explicitly uses the data and variables from the workspaces 
+	"final_mh.mat" 	and "final_dram.mat". If comparison of subsequent parameterizations 
+	are desired, they must be specified.
+	GENERATES overlaid_param_pdfs.fig figures 
+	/finalResults&Workspaces/figures/comparison
+
+------------------------------------------------------------------------------------------
 SUB-DIRECTORIES
 finalResults&Workspaces
 	contains the workspaces and resulting figures that are found in the final REU write up

@@ -119,7 +119,16 @@ mcmcplot(chain,[],results,'denspanel',2);
 % the integrated autocorrelation time and |geweke| is a simple test
 % for a null hypothesis that the chain has converged.
 
-chainstats(chain,results)
+chainstats
+cs = chainstats(chain,results);
+pName = {'alpha'; 'beta'; 'gamma'; 'delta'};
+mean = cs(:,1);
+std = cs(:,2);
+MC_err = cs(:,3);
+tau = cs(:,4);
+geweke = cs(:,5);
+T = table(pName, mean, std, MC_err, tau, geweke);
+writetable(T, strcat(filename, 'chainstats.txt'))
 
 % Find the optimal parameters
 ind = find(ss2chain == min(ss2chain));

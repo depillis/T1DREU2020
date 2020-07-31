@@ -7,7 +7,8 @@ Subteam1: MCMC & PSO
 
 
 This subteam worked on two parameter estimation techniques: Markov chain Monte Carlo 
-methods and Particle Swarm Optimization.
+methods and Particle Swarm Optimization. Our goal for the summer was to learn parameter
+estimation techniques in order to estimate the parameters of the Type 1 Diabetes ODE model
 ------------------------------------------------------------------------------------------
 *************************
 Astrostats_mcmc_tutorial
@@ -44,7 +45,9 @@ While we did not explicitly use these codes, we think they are useful training t
 **********************
 MJLaine_Algae_example
 **********************
-This folder contains codes written by M. J. Laine that uses the mcmcstat library to parameterize a biological algae ODE model. This is the tutorial which we used to help us learn how to implement the DRAM MCMC method.
+This folder contains codes written by M. J. Laine that uses the mcmcstat library to 
+parameterize a biological algae ODE model. This is the tutorial which we used to help 
+us learn how to implement the DRAM MCMC method.
 
 ****
 T1D
@@ -57,7 +60,7 @@ results (mainly visual)
 ------------------------------------------------------------------------------------------
 Finding code and figures from the final REU write up according to ODE model
 
-1) Lotka-Volterra
+1) Lotka-Volterra: all figure names are consistent between write up and .fig files
 
    - MCMC
 	code: 	   /Lotka_Volterra/MCMC/DRAM_tutorial
