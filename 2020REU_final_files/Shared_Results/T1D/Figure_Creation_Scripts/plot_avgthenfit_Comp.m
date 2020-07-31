@@ -7,7 +7,7 @@
 %                final parameter values
 
 
-addpath('comparison_data')
+addpath('averagethenfit_comparison_data')
 % load file with all mean predictions
 % joint, dual, pso, dram
 avg = readmatrix('joint_dual_pso_dram_avgPred.csv');
