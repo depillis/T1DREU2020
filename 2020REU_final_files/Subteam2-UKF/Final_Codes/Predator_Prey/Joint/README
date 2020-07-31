@@ -6,4 +6,6 @@ This folder is meant for using the Joint UKF to perform estimation of states and
 -UKF.m - performs ALL iterations of the Joint UKF algorithm
 -Joint_UKF_Real_Data_Figures - produces figures found in the paper (as well as some extras)
 
+Note that running JointMain.m will produce all figures automatically and the run time is pretty fast, around 10 seconds or so.
+
 All other files are needed for some linear algebra and have not been altered since this code was received from Chow-Ferrer.
