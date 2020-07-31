@@ -1,4 +1,5 @@
-This folder contains code to run the Dual UKF on the T1D model using Li data. The csv files here contain information about the final parameter values for each mouse (all_values_important), the raw li data (dat1-11.csv), and the li averaged data (avglietal.mat),Additionally, it includes files to produce many of the figures seen in the final writeup. There are a variety of files for various purposes, split up into categories below:
+This folder contains code to run the Dual UKF on the T1D model using Li data. The csv files here contain information about the final parameter values for 
+each mouse (all_values_important), the raw li data (dat1-11.csv), and the li averaged data (avglietal.mat),Additionally, it includes files to produce many of the figures seen in the final writeup. There are a variety of files for various purposes, split up into categories below:
 
 
 *****PRODUCING FITS TO EVERY MOUSE USING THE DUAL UKF***************
