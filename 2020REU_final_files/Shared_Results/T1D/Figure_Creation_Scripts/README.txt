@@ -31,10 +31,22 @@ Mouse6_ComparisonFigure_Creation.m
 
 No_Wave_Glucose_Comparison 
 	Script to produce figure of the glucose simulations under each algorithm's final parameters when wave turned off.
+	USES
+	- mcmc_nowave_glucose.csv 
+	- PSO_m6_nowave.mat
+	- mouse6_joint_nowave.csv
+	- all_values_IMPORTANT.csv
 	
 UKF_Avg_Data_Comparison_Figure 
 	Script to compare performance of averaging techniques for Joint, Dual, and PSO and plot figure
-
+	USES
+	- avglietal.mat
+	- Average_Then_Fit_Joint.csv
+	- Average_Then_Fit_Dual.csv
+	- Average_Then_Fit_PSO.csv
+	- Fit_Then_Average_Joint.csv
+	- Fit_Then_Average_Dual.csv
+	- Fit_Then_Average_PSO.mat
 	
 
 Folders:
