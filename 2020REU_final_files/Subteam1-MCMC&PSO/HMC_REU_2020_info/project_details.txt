@@ -1,5 +1,4 @@
-This document contains information for the subteam working on MCMC and PSO parameterization
-methods during the Harvey Mudd Summer 2020 REU program.
+This document contains information for the subteam working on MCMC and PSO parameterization methods during the Harvey Mudd Summer 2020 REU program.
 
 ---------------------------------------------------------------------------------
 OVERLEAF
