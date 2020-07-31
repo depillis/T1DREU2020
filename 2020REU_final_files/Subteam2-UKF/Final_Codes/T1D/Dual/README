@@ -30,17 +30,6 @@ To see analysis of parameter movement from running the Dual UKF on all mice the 
 
 **********************************************************************
 
-*****ALGORITHM COMPARISON FIGURES*************************************
-In addition to figures just about the Dual UKF, this folder contains codes related to comparing the Dual UKF, Joint UKF, MCMC, and PSO algorithms. In particular:
-
-- Fit_Then_Average_Figure - script to produce figure that shows quality of Dual, Joint, and PSO when using fit-then-average approach on averaged data
-- Mouse6_ComparisonFigure_Creation - Script to produce figure showing performance of Joint, Dual, PSO, and MCMC on mouse 6
-- No_Wave_Glucose_Comparison - run to produce figure of the glucose simulations under each algorithm's final parameters when wave turned off.
-- UKF_Avg_Data_Comparison_Figure - script to compare performance of averaging techniques for Joint, Dual, and PSO
-
-
-*******************************************************************
-
 
 ********USE AVERAGED DATA******************************************
 Experimentation was also done using the averaged Li dataset created by subteam 1. To run this version of algorithm (results are already in this folder but this is in case a rerun is needed) use the following:
