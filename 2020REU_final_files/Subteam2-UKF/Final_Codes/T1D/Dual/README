@@ -1,4 +1,10 @@
-This folder contains code to run the Dual UKF on the T1D model using Li data. Additionally, it includes files to produce many of the figures seen in the final writeup. The files do the following:
+This folder contains code to run the Dual UKF on the T1D model using Li data. Additionally, it includes files to produce many of the figures seen in the final writeup. 
+
+To produce best fits for every mouse using the 5 iterations approach, use Main_Get_Best_Params_Individual.m. Note that to run this file to completion as is, meaning that all 11 datasets are parametrized, 
+the run time is very long, on the order of 9 hours. This file can be modified to do fits to individual mice if needed. Additionally, current results from this file are already saved in this folder, meaning that all
+files related to figure creation can still be run WITHOUT having to run Main_Get_Best_Params_Individual.m first.
+
+The files do the following:
 - AcutevsProgressiveFigure - produce figure that shows difference in shape between acute and progressive mice.
 
 - calculateMSEAllMice - prints out MSE values for all mice based on fits with parameter values determined by csv file which is specified in the script
