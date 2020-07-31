@@ -1,0 +1,2 @@
+This folder contains figures and their respective MATLAB files that show results involving MULTIPLE algorithms. The Matlab .fig files are located in the "Figures" folder, 
+while the codes that generate the figures are in "Figure_Creation_Scripts".
