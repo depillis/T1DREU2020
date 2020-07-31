@@ -310,7 +310,6 @@ res = [];
 [results, chain, s2chain]= mcmcrun_custom(model,data,params,options,...
                            modeltype,parVer,wave,res);
 
-chainstats(chain,results)
 %% RUN & SAMPLE MCMC SAMPLE
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Then re-run starting from the results of the previous run
@@ -356,8 +355,19 @@ set(gca, 'FontSize', 20)
 % the integrated autocorrelation time and |geweke| is a simple test
 % for a null hypothesis that the chain has converged.
 
+% This saves the chainstats data but it is only written for the parameter
+% set "base/1' and "base+/1"
 chainstats(chain,results)
-cstats = chainstats(chain,results);
+cs = chainstats(chain,results);
+pName = {'e1'; 'e2'; 'delta_B'; 'SI'; 'GI'; 'mu_R'; 'mu_E'; 'alpha_eta';...
+         'beta_eta'; 'eta'};
+mean = cs(:,1);
+std = cs(:,2);
+MC_err = cs(:,3);
+tau = cs(:,4);
+geweke = cs(:,5);
+T = table(pName, mean, std, MC_err, tau, geweke);
+writetable(T, strcat(filename, 'chainstats.txt'))
 
 %% PLOT PREDICTION VS. OBSERVED DATA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

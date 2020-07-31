@@ -1,4 +1,13 @@
-% Script for plotting average data and calculating MSEs
+%% Plot glucose predictions from different parameterizations
+%  Author:       M. Watanabe
+%  Date:         June 2020
+%  Desc:         Function to plot the glucose predictions from PSO, MCMC,
+%                UKFs parameterizations. PSO/MCMC run on averaged data.
+%                UKFs perform parameterization multiple times and average
+%                final parameter values
+
+
+addpath('comparison_data')
 % load file with all mean predictions
 % joint, dual, pso, dram
 avg = readmatrix('joint_dual_pso_dram_avgPred.csv');
@@ -27,7 +36,7 @@ legend('Averaged acute', 'PSO', 'MCMC', 'Dual UKF', 'Joint UKF', 'Location', 'no
 
 % CALCULATE MSEs
 % joint, dual, pso, dram
-mses = readmatrix('avgMSE.csv');
+mses = readmatrix('joint_dual_pso_dram_avgMSEdata.csv');
 mse_joint = error_mse(li(:,2), mses(:, 2)); % joint
 mse_dual = error_mse(li(:,2), mses(:, 4)); % dual
 mse_pso = error_mse(li(:,2), mses(:, 6)); % pso
