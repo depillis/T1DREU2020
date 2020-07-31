@@ -20,7 +20,7 @@ ODE_allparams2.m - 12 equation ODE system for T1D, value of eta is 0.018. This O
 Additionally, only one mu parameter is used, the other is a placeholder value only. 
 
 Produce_Full_Figure_joint.m - produces figures with all acute and progressive results from paper
-This creates the figures joint_acute_all.fig and joint_progressive_all.fig
+This creates the figures joint_acute_all.fig and joint_progressive_all.fig. Uses csv file all_values_important_multiple_eta.csv. 
 
 T1D_ODE_Parameters.m - file containing all the baseline parameter values. Used for initialization
 
@@ -28,11 +28,13 @@ UKF_allparams.m - code to run the Joint UKF for the T1D ODE system
 
 GetBoxPlots.m - code to create boxplots for parameters that change more than 1%
 This creates the fig file: joint_param_boxplots.fig It is a collection of boxplots for all the parameters that change more than 1%. 
-These parameters are specified within the function, not calculated. A list is availble in the paper. 
+These parameters are specified within the function, not calculated. A list is availble in the paper. Uses csv file all_values_important_multiple_eta.csv. 
+
 
 StateSimulations.m - code to create plots of all the simulated states for the estimated parameters. 
 This creates the fig files: Joint_mouse6_allstates.fig, Joint_mouse6_subsetofstates.fig, and Joint_mouse6_allstates_nowave.fig.
 Currently this is set up to run these figures for mouse 6 only, however it can run the figures for the other mice. If you wish to run figures
-for mice 9-11, make sure to use ODE_allparams2 so that you are using the correct eta value. 
+for mice 9-11, make sure to use ODE_allparams2 so that you are using the correct eta value. Uses csv file all_values_important_multiple_eta.csv. 
+
 
 All other files are simply used for simple algebra purposes.
