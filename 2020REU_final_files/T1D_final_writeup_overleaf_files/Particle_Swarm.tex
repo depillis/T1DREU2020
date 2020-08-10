@@ -1,0 +1,41 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{empheq,mathtools}
+\newcommand{\dd}[1]{\mathrm{d}#1}
+\usepackage[margin=1.0in]{geometry}
+
+\begin{document}
+\section{Particle Swarm Optimization}
+Particle Swarm Optimization (PSO) is a global evolutionary optimization algorithm. Similarly to MCMC, it functions by iteratively and stochastically proposing solutions to an optimization problem, judging the quality of each solution proposed by a user-defined metric. As a meta-heuristic, PSO is widely applicable (CITE). For the purpose of parameterizing biological models, the optimization problem in question is finding the parameter set that produces a solved system that most closely fits an empirical data set. This is accomplished by lending an appropriate function for minimization to the PSO algorithm, known as the \emph{objective function} (CITE). The objective function is what is numerically minimized to judge how closely a system solved with the proposed parameters fits the data set in question.
+\par PSO is worthy of investigation for parameterization of biological models due to its computational efficiency and minimal reliance on design parameters. This makes implementation of PSO for parameter fitting straight-forward and generalizable. PSO is also derivative-free, meaning that an objective function need not be differentiable. In addition to reducing computational complexity, this opens up many possibilities for the evaluation of how well a given parameter set fits observed data. Finally, PSO is highly appropriate to parameterize models with a large number of parameters. Because optimizing $p$ parameters requires a search space of dimension $p$, the ability to PSO to run easily in parallel makes this task more manageable and efficient. 
+
+\subsection{Algorithm}
+PSO's algorithmic development by Kennedy and Eberhart in 1995 was based on work done by zoologists and sociobiologists simulating the movement of flocks of birds. A model in and of itself, PSO was meant to capture the social interactions between birds within the flock. Each bird has a level of autonomy, yet the flock moves as a whole. Kennedy and Eberhart aimed to replicate this idea of individual and collective movement by representing each bird in the flock with a simple software agent, referred to as a \emph{particle}. 
+
+As a flock flies, all birds are searching for food. Each bird knows where the best food source it has seen is, and it can listen to the squawks of others to determine their findings. If another bird has found a better food source than this bird has ever seen, it will likely change its flight path to investigate what that other bird has found. Otherwise, it will continue to explore, but also move towards its best discovered food source. All in all, as this process progresses, this leads to the flock localizing to one area, the location with the optimum food. Putting this mathematically, the algorithm is as follows:
+
+% Alg
+\subsection{Lotka-Volterra Implementation}
+PSO was used to fit the 4 parameters of the Lotka-Volterra system to the both simulated Hare-Lynx data and that from Hudson Bay Company data. The same was done for the parameters of the  MATLAB includes a built-in implementation of PSO in the Global Optimization Toolbox, thus that was used. 
+\subsubsection{Objective function}
+In order to adapt PSO to fit parameters to the model, an appropriate objective function needed to be chosen. As the objective function is minimized in PSO, a function that would decrease in values when a better parameter set is proposed needed to be implemented. The most simple function to fit this requirement was a simple sum-of-squares functions measuring the difference of the model outputs for both the hare and lynx populations and the observed data at analogous time points. However, to maintain consistency between PSO and the other optimization algorithms used, the normal log-likelihood function was used. 
+\subsubsection{Options}
+Many options exist in the MATLAB implementation of PSO itself: coefficients $c_{1}$ and $c_{2}$ can be specified, as well as swarm size, allowable neighborhood, and maximum number of iterations. In our implementation, coefficients were set to default values by MATLAB, the neighborhood was not restricted (global best), a swarm size of 40 was selected, and the maximum number of iterations were set to 400. From research, swarm sizes of 20-60 tend to give both accurate and efficient results (as runtime increases with swarm size), so a midpoint value of 40 was chosen. The choice of 400 iterations stemmed from example code parameterizing a similarly-sized system.
+\subsection{Results}
+During the run of the PSO function, three outputs are produced: a graph of the objective function's value at each iteration of the algorithm, a table printed in the command window containing information and the swarm at intermittent intervals, and a final set of optimized parameters.
+When run on the Hudson Bay Company data 
+\subsection{Validation}
+
+\begin{table}[H]
+  \begin{center}
+    \label{tab:table1}
+    \begin{tabular}{c|c} % <-- Alignments: 1st column left, 2nd middle and 3rd right, with vertical lines in between
+      \textbf{Algorithm} & \textbf{MSE} \\
+      \hline
+      \textbf{Average acute data} & 517.6\\
+      \textbf{Distribution-based} & 1246.9\\
+    \end{tabular}
+    \caption{Mean Squared Error (MSE) of ODE simulations using parameter estimates to fit to averaged acute Li data. The quantification of the error confirms our visual hypothesis that PSO performs the best fit on this data set.}
+  \end{center}
+\end{table}
+\end{document}

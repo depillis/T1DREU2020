@@ -1,0 +1,118 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{T1D_{final\_writeup}}
+\author{Christina Catlett, Daniel Shenker, Rachel Wander, Maya Watanabe}
+\date{June 2020}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+\begin{enumerate}
+    \item 
+    \item Current knowledge
+    \begin{itemize}
+        \item MCMC
+        \item PSO
+        \item UKF
+        \item MCMC/Bayesian approaches are very common in parameterizing biological systems: here are some of the papers/systems that have used it
+        \item Kalman filters are another method, not as widely used (?): here are some examples
+    \end{itemize}
+    \item Introduce Lotka-Volterra
+    \item Introduce T1D
+    \begin{itemize}
+        \item Why are we using these models?
+    \end{itemize}
+    \item Parameterization: MCMC v. Kalman filters
+    \begin{itemize}
+        \item What is the goal of parameterization?
+        \item What are the differences?
+        \item High-level explanation of each algorithm
+        \item When would we use one technique over the other?
+        \begin{itemize}
+            \item What is required initially? What type of info fits my method?
+        \end{itemize}
+    \end{itemize}
+\end{enumerate}
+
+\section{Problem Set-up}
+\begin{enumerate}
+    \item Lotka-Volterra
+    \begin{itemize}
+    \item What are the elements of this model
+    \item Equations, general figures etc.
+    \item What does parameterization mean in the context of this model? What are the parameters - consistent naming?
+    \item Where does this data come from?
+\end{itemize}
+    \item T1D
+    \begin{itemize}
+    \item What are the elements of this model
+    \item Equations, general figures etc.
+    \item What does parameterization mean in the context of this model? What are the parameters - consistent naming?
+    \item Where does this data come from?
+    \item How did we shift and average data?
+    \item Li data only
+    \begin{itemize}
+        \item For UKF justify single mouse 6 (good), mouse 10 (bad)
+    \end{itemize}
+\end{itemize}
+\end{enumerate}
+
+
+\section{MCMC}
+\subsection{Explanation of theory}
+\subsubsection{General tutorial}
+\subsection{Parameterize Lotka-Volterra}
+\subsection{Parameterize T1D}
+
+
+\section{Kalman Filters}
+\subsection{Explanation of theory}
+\subsubsection{General tutorial}
+\subsection{Parameterize Lotka-Volterra}
+\subsubsection{Joint}
+\subsubsection{Dual}
+\subsection{Parameterize T1D}
+\subsubsection{Joint}
+\subsubsection{Dual}
+
+\section{Discussion}
+\subsection{General discussion of each algorithm}
+This can include discussions about Lotka-Volterra and T1D.
+\begin{itemize}
+    \item UKFs
+    \item DRAM 
+    \begin{itemize}
+        \item bimodal distributions: some parameters may have more than one local maxima and thus more than one optimal range of values (it will likely depend on interactions with other parameters).
+        \item what constitutes "good" chain performance?
+        \item averaged vs. mouse 6 data
+    \end{itemize}
+    \item PSO
+\end{itemize}
+\subsection{Comparing Results}
+\begin{itemize}
+    \item Lotka-Volterra comparisons
+    \item take mean of 9 post-ukf mice and compare to MCMC means and PSO
+    \item mouse 6 comparison MCMC v UKF(joint and dual) v PSO
+    \item compare MSE for all (table)
+\end{itemize}
+\subsection{Improving our algorithms}
+\begin{itemize}
+    \item Optimal number of parameters MCMC
+    \item Running multiple iterations of UKF
+\end{itemize}
+\subsection{What can we do with both?}
+\begin{itemize}
+    \item Have noticed when we might want to use one technique over the other?
+    \item Combining UKF and MCMC
+\end{itemize}
+\subsection{Future applications}
+
+
+\section{References}
+
+
+
+\end{document}

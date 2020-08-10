@@ -1,0 +1,32 @@
+\section{Particle Swarm Optimization}\label{PSO_SECT}
+
+Particle Swarm Optimization (PSO) is a global optimization algorithm that falls within the class of evolutionary algorithms. Similarly to MCMC, it functions by iteratively and stochastically proposing solutions to an optimization problem, judging the quality of each solution proposed by a user-defined metric. As a meta-heuristic, PSO is widely applicable (CITE). For the purpose of parameterizing biological models, the optimization problem in question is finding the parameter set that produces a solved system that most closely fits an empirical data set. This is accomplished by lending an appropriate function for minimization to the PSO algorithm, known as the \emph{objective function} (CITE). The objective function is what is numerically minimized to judge how closely a system solved with the proposed parameters fits the data set in question.
+\par PSO is worthy of investigation for parameterization of biological models due to its computational efficiency and minimal reliance on design parameters. This makes implementation of PSO for parameter fitting straight-forward and generalizable. In a similar vein, PSO is also significantly less dependent on an initial set of values than either MCMC or Kalman Filters. This is due to the use of many points by the swarm. PSO is also derivative-free, meaning that an objective function need not be differentiable. In addition to reducing computational complexity, this opens up many possibilities for the evaluation of how well a given parameter set fits observed data (CITE). Finally, PSO is highly appropriate to parameterize models with a large number of parameters. Because optimizing $p$ parameters requires a search space of dimension $p$, the ability to PSO to run easily in parallel makes this task more manageable and efficient (CITE). 
+\par In this section, we begin by explaining the algorithm behind PSO in Section \ref{PSO_alg}. We then tutorial its implementation in the case study of the Lotka-Volterra model in Section \ref{PSO_LV}. Moving then to the more complex T1D system in Section \ref{PSO_T1D}, we show a more refined implementation of PSO, as well as show how its versatility makes it a useful tool for validation. 
+
+\subsection{Algorithm}\label{PSO_alg}
+PSO's algorithmic development by Kennedy and Eberhart in 1995 was based on work done by zoologists and sociobiologists simulating the movement of flocks of birds. A model in and of itself, PSO was meant to capture the social interactions between birds within the flock. Each bird has a level of autonomy, yet the flock moves as a whole; their movement relies of their own knowledge, known as \emph{individual knowledge}, and the swarm's knowledge, known as \emph{social knowledge}. Kennedy and Eberhart aimed to replicate this idea of individual and collective movement by representing each bird in the flock with a simple software agent, referred to as a \emph{particle}. 
+
+\par Put metaphorically, as a flock of birds flies, all birds are searching for food. Each bird knows where the best food source it has seen is, and it can listen to the squawks of others to determine their findings. If another bird has found a better food source than this bird has ever seen, it will likely change its flight path to investigate what that other bird has found. Otherwise, it will continue to explore, but also keep in mind the best food source it has found so far, drifting towards that point. All in all, as this process progresses, this leads to the flock localizing to one area, the location with the optimum food. Putting this mathematically, the algorithm is as follows:
+
+% INSERT PSO ALG DESC HERE %
+\subsection{General Implementation} \label{PSO_Imp}
+MATLAB includes a built-in implementation of PSO in the Global Optimization Toolbox, known simply as \texttt{particleswarm}. It is straightforward in its setup and allows for reasonable customization of the design parameters. Though the specification of many of the following components of PSO are optional in the MATLAB implementation, and left to their default values in our work, they are described here. 
+\subsubsection{Objective Function}
+The objective function is a necessary part of PSO, and must be supplied to \texttt{particleswarm} as an anonymous function in MATLAB. It directs how the coordinates of parameter space visited by the particles should be used. 
+\subsubsection{Swarm Size}
+\subsubsection{Iterations}
+\subsubsection{Velocity Components}
+\subsubsection{Acceleration Coefficients}
+\subsubsection{Topology}
+
+
+\subsection{Lotka-Volterra Implementation} \label{PSO_LV}
+\subsubsection{Specifications}
+\subsubsection{Results}
+
+\subsection{T1D Implementation} \label{PSO_T1D}
+\subsection{Specifications}
+\subsubsection{Results}
+\subsubsection{PSO as Validation}
+

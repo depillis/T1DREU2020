@@ -1,0 +1,66 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1.0in]{geometry}
+\usepackage[bottom]{footmisc}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{mathtools}
+\usepackage{amsmath}
+\usepackage[most]{tcolorbox}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{multirow}
+\usepackage{titlesec}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern} 
+\usepackage{lipsum}
+\usepackage[toc,page]{appendix}
+\usepackage{changepage}
+\DeclareUnicodeCharacter{2212}{-}
+
+\setcounter{secnumdepth}{4}
+\usepackage[toc,page]{appendix}
+
+\title{Parameter Estimation for the Type 1 Diabetes ODE Model Final Writeup}
+\author{Christina Catlett, Daniel Shenker, Rachel Wander, Maya Watanabe\\{\small Advisors: Dr. Lisette de Pillis, Dr. Blerta Shtylla, Dr. Christina Edholm, An Do}}
+\date{Summer 2020}
+
+\begin{document}
+
+\maketitle
+\begin{abstract}
+Data assimilation connects theoretical models to real-world data, producing more relevant and usable predictions of phenomena. We seek to use data assimilation for parameter estimation of non-linear dynamical systems models, specifically examining three differing approaches: Markov chain Monte Carlo (MCMC) methods, Particle Swarm Optimization (PSO), and Unscented Kalman Filters (UKF). Detailing our own work and acting as a tutorial, we explain, demonstrate, and compare the use of each technique on two models: one simple demonstrative model, the Lotka-Volterra predator-prey model, and one complex model from current literature, a single compartment ODE model of Type 1 diabetes onset (T1D) in the pancreas of mice from Shtylla et al., 2019. Through experimentation, we discover strengths and limitations of each technique, suggesting that the composition of a model and data set may lend itself to one technique over another due to factors such as the number of parameters being estimated or type of data, among other things. We additionally suggest improvements upon our work and explore ways to combine the techniques examined. 
+\end{abstract}
+\tableofcontents
+%\titleclass{\part}{top}
+%\titleclass{\chapter}{straight}
+%\section{Introduction}
+
+\include{Final_Paper_Pieces/Intro_piece}
+
+\include{Final_Paper_Pieces/Problem_SetUp_Piece}
+
+\include{Final_Paper_Pieces/MCMC_piece}
+
+\include{Final_Paper_Pieces/PSO_Piece}
+
+
+\include{Final_Paper_Pieces/Kalman_Filter_Overview_Piece}
+
+\include{Final_Paper_Pieces/Kalman_Filter_Implementation_Piece}
+
+\include{Final_Paper_Pieces/Results_Piece}
+
+\include{Final_Paper_Pieces/Discussion_Piece}
+
+\include{Final_Paper_Pieces/Acknowledgements}
+
+\bibliographystyle{plain} % We choose the "plain" reference style
+\bibliography{References} % Entries are in the "refs.bib" file
+
+\include{Final_Paper_Pieces/Appendix}
+
+
+
+
+\end{document}

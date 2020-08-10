@@ -1,0 +1,143 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1.0in]{geometry}
+\usepackage{titlesec}
+\setcounter{secnumdepth}{4}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{graphicx}
+
+% Figures:
+% 1) Hare-Lynx data
+% 2) Flow diagram of T1D
+% 3) Li et al. data (all - acute in color, prog in color)
+% 4) Histograms of data stats
+% 5) Li mouse 6 data
+% 6) diagram of data construction
+% 7) Plotted average data
+
+\begin{document}
+\section{Model Descriptions}
+In this section, we formally introduce the example systems for which we are estimating parameters. To this effect, we outline the equations of the systems, explain the construction of simulated data, and examine experimental data collected. 
+\par Two systems were used: one a classical, simple example of a dynamical system, and the other a more complicated example from current literature. The simple system serves solely as a vehicle for a clear and understandable tutorial, while the more complex system demonstrates a realistic use case for these paramaterization techniques that would arise in biological research. 
+
+\subsection{Lokta-Volterra model}
+Natural oscillations have long been observed between predator and prey populations. The Lotka-Volterra model of predator-prey dynamics, developed independently by Alfred J. Lotka and Vito Volterra in the 1920s, is a well-known pair of nonlinear ordinary differential equations that describe these oscillations. It is an elementary example of a dynamical system and will be used as our simple, tutorial system.
+\par In the Lotka-Volterra system, the predator population $L$, and the prey population $H$ at time $t$ are given by
+\begin{equation}
+\frac{dH}{dt} = \alpha H - \beta HL 
+\end{equation}
+\begin{equation}
+\frac{dL}{dt} = -\gamma L + \delta HL
+    \end{equation}
+where $\alpha$ is the intrinsic rate of prey population increase, $\beta$ the rate of predation, $\gamma$ the natural mortality rate of the predator population, and $\delta$ the reproduction rate of the predator population per prey consumed. All parameters take on a single, constant value for the entire data set.
+\par This model rests on several simplifying assumptions. First, they prey population will grow exponentially in the absence of the predator population. Second, the predator population will starve in the absence of prey. Finally, there is not a limit to the number of prey that can be consumed by the predator population.
+\par In its stable state, each population oscillates with a constant period between a maximum and minimum population, with the peak of the predator's oscillation lagging behind that of the prey's \cite{Lotka} \cite{Volterra}. 
+
+\subsubsection{Data}
+One of the hallmark data sets in ecology, the Canadian lynx and snowshoe hare pelt-trading records of The Hudson Bay Company provide a classical example of behavior that fits well to the Lotka-Volterra model. Expressed in thousands of individuals, the number of pelts collected from each species was recorded yearly for years 1845-1935 (CITE). This quantity acts as a proxy for population. We concede that this data does not represent as perfect Lotka-Volterra system: the populations reached by each species year-over-year are not the same, and the timing of peaks is not always consistent with the predator-prey lag predicted. Other predator-prey models might capture this behavior better, however, since simplicity is important to our tutorial, we deem the Lotka-Volterra model reasonable for our purposes. 
+
+\subsubsection{Quantities of interest}
+All model parameters: $\alpha, \beta, \gamma, \delta$, are considered to be unknown. This makes them quantities of interest for estimation through MCMC, PSO, and Kalman Filtering. Additionally, an amount of noise exists within the data. The approach to account for this noise during paramterization is different between the parameterization techniques. In Kalman Filters, an esitmate for the amount of Gaussian noise is made prior to the filtering process (detailed in Section X). Alternatively, in MCMC and PSO we seek to estimate the amount of noise in the data \emph{during} the parameterization routine. This is done by treating the noise for each species as an additional parameter: $\sigma^{2}_{H}$ and $\sigma^{2}_{L}$, for hares and lynx respectively. This assumes that the noise within the two populations is independent. $\sigma^{2}$ represents the variance of the noise, assuming Gaussian noise centered around 0,
+\begin{equation}
+\epsilon_{H}\sim\mathcal{N}(0,\sigma_{H}^{2})
+\end{equation}
+\begin{equation}
+\epsilon_{L}\sim\mathcal{N}(0,\sigma_{L}^{2})
+\end{equation}
+In total, six parameters were estimated for. Denoting the parameter set by $\theta$,
+\begin{equation}
+\theta = [\alpha, \beta, \gamma, \delta, \sigma_{H}^{2}, \sigma_{L}^{2}]
+\end{equation}
+for PSO and MCMC, and 
+\begin{equation}
+\theta = [\alpha, \beta, \gamma, \delta]
+\end{equation}
+for the Kalman Filter.
+
+\subsubsection{Initial parameter guess} \label{section:Initial_parameter_guess}
+Both MCMC and Kalman filters require an initial guess for the values of the parameters. This provides them a point from which to start their estimation. In practice, these initial parameters can be decided using a variety of means. However, a better initial parameter guess causes faster convergence to the ideal parameters determined by each algorithm.
+Based on other parameterization work done on the Hudson Bay Company data set (***CITE***), we initially guessed values $\alpha = \gamma = 0.7$ and $\beta = \delta = 0.1$.
+\par This guess was then improved by a running a preliminary \emph{unconstrained nonlinear optimization} routine with MATLAB's default \texttt{fmincon}. Unconstrained nonlinear optimization is a common, fast, and relatively simple technique for parameter fitting (CITE). By reducing the sum-of-squares difference between the model output and the data to a desired tolerance, a 'best-fit' set of parameters is chosen. While \texttt{fmincon} provides a good preliminary parameter estimate, MCMC and Kalman Filtering can be used to tune these parameters further, potentially resulting in a better fit. The resultant parameter set $\theta_{min}$ for Kalman Filtering is 
+\begin{equation}
+\theta_{min} = [0.625, 0.190, 0.661, 0.0468]
+\end{equation}
+For MCMC, this becomes 
+\begin{equation}
+\theta_{min, with noise} = [0.625, 0.190, 0.661, 0.0468, \sigma_{H}^{2}, \sigma_{L}^{2}]
+\end{equation} incorporating the noise parameters described above. $\sigma_{H}^{2}$ and $\sigma_{L}^{2}$ were then initialized using variances calculated from the residuals of the data points and the model using $\theta_{min}$ as defined above, 
+\begin{equation}
+\sigma_{H}^{2} = 1487.277
+\end{equation} 
+\begin{equation}
+\sigma_{L}^{2} = 268.840
+\end{equation}
+Altogether, the initial parameter guess becomes
+\begin{equation}
+\theta_{min} = [0.625, 0.190, 0.661, 0.0468]
+\end{equation}
+\begin{equation}
+\theta_{min, with noise} = [0.625, 0.190, 0.661, 0.0468, 1487.277, 268.840]
+\end{equation}
+
+\subsection{Type 1 diabetes model}
+Contemporary research is being done to model Type 1 diabetes (T1D) with dynamical systems. To demonstrate the utility of MCMC, PSO, and Kalman Filtering for parameter estimation in a realistic research context, one such model is examined.
+\par Type 1 diabetes is an autoimmune disease characterized by the inability to regulate blood glucose, leading to chronically elevated glucose levels. These elevated glucose levels are a result of abnormal immune attacks on insulin-producing $\beta$-cells within the pancreas. Cells in the body respond to insulin by absorbing glucose from the blood, thus lowering blood glucose levels. Therefore, when these $\beta$-cells are damaged, and normal insulin production is disrupted, blood glucose rises to exceed healthy levels. 
+\par One is genetically predisposed for Type 1 diabetes, however onset of the disease is theorized to be determined by the immune system's ability to respond to early structural changes in the pancreas, known as the \emph{apoptotic wave}. The apoptotic wave occurs in mammals during weaning when there are high rates of pancreatic $\beta$-cell apoptosis (natural, controlled cell death). As described above, the apoptosis of $\beta$-cells causes glucose levels to rise. Put simply, if blood glucose is able to return to healthy levels after this wave, diabetes onset does not occur. Likewise, if it is not, diabetes onset occurs, and chronically elevated glucose levels follow. The cellular mechanics of this onset are complex and largely uncertain, but hypothetical onset can be modeled with a dynamical system \cite{shtylla2019mathematical}.
+\par Shtylla et al. details a single compartment model that models macrophage, immune cell, and dendritic cell populations within the pancreas, as well as blood insulin and glucose levels for genetically-engineered non-obese diabetic (NOD) mice. The 12-equation nonlinear ODE model includes 53 biologically-driven parameters, such as the volume of blood in the pancreas, the clearance rate of various macrophages, and the basal rate of glucose production, to name a few \cite{shtylla2019mathematical}. A description of these parameters and the equations of the model are included in Appendix X. In previous work, parameter values were estimated from biological literature and altered experimentally to resemble average system behavior seen in collected data, however the model was not fit directly to observed data sets. 
+
+\subsubsection{Data}
+While the Lotka-Volterra model functions on a population-level, data provided for the T1D model represents the system for a single mouse. In order to gain insights into the behavior of T1D in both individuals and on a population-level, the observed data used was manipulated to represent the cohort in its entirety. 
+
+\paragraph{Individual data} \label{section:Individual_data}
+Glucose data was measured in a cohort of 11 diabetic NOD mice by Li et al (CITE). In comparison to the 11 other quantities given by the Shtylla et al. model, glucose is easily measurable and a common quantity to keep track of in NOD mice. Glucose is also the metric used to diagnose and manage diabetes. Based on biological literature, Type 1 diabetes in NOD mice is diagnosed as having onset at a blood glucose level above 250 mg/dl (CITE).
+\par In this data set and others of the same variety, there appear to be two distinct mouse behaviors: an acute rise in glucose prior to onset, and a progressive climb. Mice are classified visually and separated by this behavior (CITE). In the Li et al. data set, 9 mice were classified as acute and 2 as progressive. This analysis focuses on the 9 acute mice. 
+\par In examining the data set itself, measurements are taken at inconsistent time points starting several weeks into each mouse's life. Time was measured in weeks as a decimal to include accuracy down to the time of day when the measurement was taken. On average, measurement started at week ****, and measurements were taken every *** weeks. There was also not a consistent number of data points for each mouse in the cohort. Ranging from **** to ****, the average number of data points was ****. In order to make these somewhat sparse, inconsistently spaced data compatible with the dynamical system, they had to be converted to days. This was simply done by multiplying the associated week value by 7.
+
+\paragraph{Population-level data} \label{section:population_level_data}
+We seek to estimate general parameters for diabetes onset in NOD mice, in addition to estimating parameters in a \emph{single} NOD mouse. As addressed later in this paper, different parameterization techniques function differently to fit these population-level parameters. While Kalman Filters use results from fitting each mouse individually to estimate population parameters, MCMC uses a population-level data set. PSO can use both approaches.
+\par To construct a population-level data set from individuals' data, taking a point-by-point average is an intuitive, common method. However, this was avoided for the Li et al. data set. If averaged, the shape of the glucose curves would largely be lost due the staggering of diabetes onset times in the mouse population. Representing an average mouse would not be well-accomplished with this strategy. Instead, we developed a method to align each individual's glucose curve in time and then average all nine curves to preserve shape. 
+\par While not ideal for larger data sets, our main approach was done by hand. We were most interested in the capturing the overall shape of the acute mice: the slow increase of glucose and the sudden spike indicating acute diabetes onset. Generally, we sought to align the 9 mice at the point immediately before the large spike in glucose that denoted onset (this was typically the 3rd or 4th point from the end), here we will name them \emph{pivot points}. This conserves the shape of the onset curve. Figure X highlights the pivot points within the acute Li et al data.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm]{Model Setup Images/pivotPoints.png}
+    \caption{Diagram illustrating the process of determining glucose pivot points for 9 acute mice. Pivot points are indicated in red.}
+\end{figure}
+\par It is simple to align the time series at their pivot points using a spreadsheet, however the aligned curves must placed at some time along the $x$-axis. Shifting the data removes information about what this time should be. To define the time of pivot, we used information gained by calculating the average time span of data collection. The mice were all measured within the time range of 10 to 38 weeks. By creating an uniformly spaced time span incremented week by week, we could align the data points by week (leaving weeks where mice were not measured blank) using the same time scale. In determining which whole week increment to align the data to, we rounded weeks to their nearest whole number. For example, a measurement with the time 36.932 was aligned with the 37 week mark, while a time of 27.104 was aligned with the 27 week mark. Figure X shows this process for Mouse 6.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm]{MCMC_figs/lietal_avg_diagram.png}
+    \caption{Diagram illustrating the process of spacing Mouse 6 data within the 10-38 week time span.}
+\end{figure}
+With this method, we could average glucose data for each week. However, we still needed to shift the data to align the pivot points before averaging. Doing this relied heavily on the spacing between weeks where data was not collected. Since the data was now uniformly aligned and we expected similar end behavior for all 9 mice, we could shift our data around if we kept the spacing we set in the first alignment. In simpler terms, we reason that when we shift data, we are extracting the glucose measurements from their respective time lines, averaging data, and then fitting a final (averaged) time scale to the averaged data. The last steps were simply to line up all the pivot points, keeping the spacing between the other measurements per mouse shown in Figure X. 
+\par From this alignment, we averaged the glucose measurements and times, rounding to 3 significant figures. Lastly, each week value was multiplied by 7 to convert the timescale from weeks to days. The Shtylla et al. model uses days as its time scale, so this conversion makes the data set and the model compatible.
+\par Figure X shows the plot obtained after the shifting and averaging process. As pictured, the sharp spike in glucose observed on the individual level is conserved, avoiding the issues encountered when taking averages. This was taken to be the population-level data set. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=15cm]{Model Setup Images/avg_shifted_lietal_data.png}
+    \caption{Plot of the averaged and shifted acute mouse data. Constructed from 9 individual NOD mice, this was taken to represent the }
+\end{figure}
+\subsubsection{Quantities of Interest}
+There are 53 biologically-informed values built into the model, however 12 function as conversion rates, or otherwise known quantities \cite{shtylla2019mathematical}. Since these are known to be constant and pre-defined, they are not included in $\theta$. The remaining 41 values are treated as variable within the system and are quantities of interest for parameter estimation. For more information see Appendix ****.
+\par To minimize computation and incorporate more certainty about parameters in the system, subsets of these 41 parameters were estimated while other parameters were held relatively constant. By letting some parameters remain relatively constant, we tell our system that we are fairly confident that their values are correct. However, the values are still allows to change in very small ways; 1 percent of their original range. This was done to account for correlations between the parameters. As of yet, sensitivity analysis has not been done to identify correlated parameters, so this step was taken to encourage the natural behavior of related parameters, even within the limited system.
+\par These subsets were chosen experimentally. Only one of the tested subsets proved significant, referred to as the \emph{notable parameter subset}. This subset allowed for enough flexibility to find a relatively good fit to data, unlike others tested.
+\paragraph{Notable parameter subset} \label{section:Notable_parameter_subset}
+The notable parameter subset is composed primarily of 'active' parameters according to the Kalman Filter. 'Active' describes a greater than 1 percent change from the baseline to the fitted value for each parameter. Upon inspection of the results from Kalman Filtering, few parameters moved beyond this threshold, so these parameters were marked as significant. Seven parameters were marked as active: $G_{I}, S_{I}, \mu_{E}, \mu_{R}, e_{1}, e_{2},$ and $\delta_{B}$.
+\par In addition to the active parameters, three other parameters were added to the notable set: $\eta, \alpha_{\eta}, and \beta_{\eta}$, referred to as the $\eta$ parameters. Simply put, these parameters relate to the effectiveness of T-cells at eliminating insulin-producing $\beta$-cells. This heavily impacts the time of diabetes onset, and thus manipulating these parameters allows for horizontal shifting of the fit. While the active parameters influence the shape of the glucose spike more, these $\eta$ parameters allow for greater flexibility in the onset time. Shape and position are the main indicators of fit, and this notable parameter set does a sufficient job of addressing both while lessening computation and building more certainty about parameters within the system. 
+\par This subset was required only by MCMC due the need to have more data points than parameters. However, for comparison purposes, the subset was also run in PSO. 
+
+\subsubsection{Initial parameter guess}
+As parameterization of the model using the methods in this paper is intended to improve upon the findings in Shtylla et al., the biologically estimated parameters and initial conditions from Shtylla et al. were used as an initial guess $\theta$ for the parameters for each technique \cite{shtylla2019mathematical}. 
+
+\section{Comparison Methodology}
+In order to evaluate and compare the effectiveness of each parameterization technique, a method needed to be devised to quantify a model's goodness of fit to a data set. Because the goal of each parameterization technique is to produce system predictions that are close to observed data, this metric needs to measure the distance between the model and the data. Root Mean Squared error (RMSE) was chosen as this metric to quantify the mean residual between the model and the data set at one data point. 
+\par RMSE quantifies the standard deviation of the distance between the model prediction and the observed data at each time point $t$, assuming normally distributed residuals. Due to the large number of data points, this was thought to be a more useful technique than simply MSE, or mean squared error, which, as the name suggests is simply the RMSE squared. By taking the square root, values become more comparable to one another in magnitude, and intuition is stronger about how 'close' fits with certain RMSE values may be to one another.
+\par If RMSE is \emph{how} fit is compared, the question becomes \emph{what} fits are to be compared. Different comparisons were made to evaluate both the goodness of fit provided by each technique to the same data set, as well as some fits to validate the assumptions made in the implementation of certain techniques. The latter goal is more relevant to fitting the T1D model than it is to the Lotka-Volterra model. 
+\subsection{Lotka-Volterra model}
+Within each technique, two implementations are considered. The implementations represent slight variations on the main algorithm in question. Within each technique, the two implementations are compared for the goodness of fit to the model, and a best-fitting technique is determined using RMSE with respect to the Hudson Bay Company data, visual inspections, and technique-specific checks. Then, these three 'best' techniques are compared to one another, highlighting similarities and differences between the classes of parameterization algorithms. 
+\subsection{Type 1 diabetes model}
+Again, comparisons are made within each technique, and between all techniques. 
+Furthermore, comparisons were used a means of validation for assumptions made in fitting the T1D model. There are two main assumptions that require this validation.
+\subsubsection{Averaging mouse data}
+\subsubsection{Use of parameter subset}
+\end{document}

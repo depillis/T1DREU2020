@@ -26,6 +26,17 @@ related to their work.
 This is the folder containing all work completed by Subteam 2 this summer. See the README within this folder for details regarding folder structure and additional specifics
 related to their work.
 
+--------T1D_final_writeup_overleaf_files---------
+This folder contains the overleaf files that produces the pdf file T1D_final_writeup.pdf (last downloaded 08/10/2020). 
+To compile via local terminal: 
+1) Navigate to T1D_final_writeup_overleaf_files folder in your computer's terminal
+2) Enter the following commands
+	pdflatex Full_Copy.tex
+	bibtex Full_Copy.aux
+	pdflatex Full_Copy.tex
+	pdflatex Full_Copy.tex
+	
+
 Throughout work this summer, up until the final writing process, each subteam utilized their own Overleaf repository. Links to these repositories can be found here along with
 the link to the repository where work for the final writeup was completed.
 

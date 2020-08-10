@@ -1,0 +1,71 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+
+\title{Kalman Filter Implementation}
+\author{subteam 2}
+\date{June 2020}
+
+\begin{document}
+
+\maketitle
+
+Axis font size: 15
+Line thickness: 2
+blue (Joint UKF)
+red (Dual UKF)
+green (PSO)
+magenta (MCMC)
+raw (black)
+Data style: filled in circle bullets
+Continuous style: line
+Time for graphs T1D: 350 days, every day
+
+
+Graphs to include:
+intro plot of raw data
+iterations over time
+Best fit params vs data
+One for prey one for pred - all three
+table - three cols: PSO, MCMC, KF, two rows: columns
+
+Initial parameters? using fmincon:\\
+$\alpha = 0.625255017115405$\\
+$\beta = 0.189598180418538$\\
+$\gamma = 0.660739129608417$\\
+$\delta = 0.0467989323935181$\\
+
+Prof questions:
+Where should we start and how do we justify this point?
+How much can we just say?
+How much tutorial vs. textbook?
+
+\section{Notes on Continuity between algorithms}
+Both KFs and MCMC use "prior" and "posterior" we should be sure to clarify that these will take on different meanings for the different algorithms.
+\par Also we all need more citations
+\subsection{Parameter values}
+\begin{itemize}
+    \item Model is limiting 
+    \item Christina PSO values as initial parameter values: (alpha, beta, gamma, delta)  (0.525771872777156,	0.0202508516159993,	0.888556080190351,	0.0223647386536971)
+    \begin{itemize}
+        \item PSO run2 alpha: 0.705937508174543	beta: 0.0254953852841826	 gamma:0.650474815343774	delta:0.0171183461989444	sigmaH:1053.23765551739	sigmaL:133.720385868556
+    \end{itemize}
+    \item How do we justify the initial parameter values and true parameter values?
+    \item No true values -> most researchers won't actually know these that is why they are using these algorithms
+\end{itemize}
+\subsection{Fake data}
+\begin{itemize}
+    \item UKF: generate PSO data + random noise - noise standard deviation = sqrt(20)*randnum
+    \item subteam 1 send sim data to subteam 2
+\end{itemize}
+\subsection{Error}
+\begin{itemize}
+    \item UKF: mse
+\end{itemize}
+\subsection{Results comparison between MCMC and UKF}
+\begin{itemize}
+    \item visual
+    \item error scores
+\end{itemize}
+\end{document}
